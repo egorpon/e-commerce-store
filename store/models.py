@@ -16,6 +16,9 @@ class Category(models.Model):
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
+    category = models.ForeignKey(
+        Category, related_name="products", on_delete=models.CASCADE, null=True
+    )
     brand = models.CharField(max_length=255, default="un-branded")
     description = models.TextField(blank=True)
     slug = models.SlugField(max_length=255, unique=True)
@@ -23,7 +26,7 @@ class Product(models.Model):
     image = models.ImageField(upload_to="images/")
 
     class Meta:
-        verbose_name_plural = 'products'
+        verbose_name_plural = "products"
 
     def __str__(self):
         return self.title
