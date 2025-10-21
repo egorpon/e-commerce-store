@@ -1,27 +1,16 @@
 {% extends './base.html' %}
 {% load static %}
 {% block content %}
-  <section class="py-4 text-center container">
-    <div class="row py-5">
-      <div class="col-lg-8 col-md-6 col-sm-5 mx-auto">
-        <h2>MyStore... Shop smart. Live simple.</h2>
-        <h5 class="lead text-muted mt-3 mb-3">Explore our extensive collection.</h5>
-        <a href="#" class="btn btn-primary my-3">Create an account</a>
-      </div>
-    </div>
-  </section>
-
   <section class="album py-5 border-secondary">
     <div class="container">
-      <h5 class="pb-3">All products</h5>
+      <h5 class="pb-3">{{ category.name }}</h5>
       <div class="row row-cols-lg-4 row-cols-md-2 row-cols-sm-2 row-cols-1 g-4">
-        {% for product in all_products %}
+        {% for product in products %}
           <div class="col d-flex justify-content-center">
             <div class="card border-secondary mb-3 h-100" style="width: 18rem;">
               <img class="img-fluid" src="{{ product.image.url }}" alt="" />
               <div class="card-body d-flex flex-column">
                 <a class="card-title h4 link-offset-1-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ product.get_absolute_url }}">{{ product.title }}</a>
-                {% comment %} <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> {% endcomment %}
                 <div class="d-flex justify-content-between align-items-center mt-auto">
                   <h5 class="mb-0">$ {{ product.price }}</h5>
                 </div>
