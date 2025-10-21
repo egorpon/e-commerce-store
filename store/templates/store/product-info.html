@@ -1,0 +1,40 @@
+{% extends './base.html' %}
+{% load static %}
+{% block content %}
+  <section class="container py-5">
+    <div class="row g-4">
+      <div class="col-lg-5 col-md-6 col-sm-12 order-md-first bg-light">
+        <img class="img-fluid d-block mx-auto" src="{{ product.image.url }}" alt="Responsive image" />
+      </div>
+      <div class="col-lg-7 col-md-6 col-sm-12 ps-lg-5 ps-md-5">
+        <h4 class="mb-0">{{ product.title }}</h4>
+        <strong>{{ product.brand }}</strong>
+        <br />
+        <br />
+        <p>{{ product.description }}</p>
+        <div class="bg-light border-0 p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <p class="mb-0">Price</p>
+            <p class="text-end fw-bold fs-3 mb-0">${{ product.price }}</p>
+          </div>
+        </div>
+        <div class="p-3">
+          <div class="d-flex align-items-center justify-content-between">
+            <div>
+              <label for="select" class="form-label mx-auto">Quantity</label>
+              <select class="form-select" id="select">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+
+            <button type="button" id="add-button" value="" class="btn btn-outline-primary btn">Add to cart</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
