@@ -1,0 +1,41 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block content %}
+  <section class="container py-5">
+    <h3>Shopping cart</h3>
+    <div class="row product-item p-3 my-3">
+      <div class="col col-md-4 col-lg-2 order-md-first bg-light">
+        <img src="" alt="Responsive image" class="image-fluid d-block mx-auto" witdh="200px" />
+      </div>
+      <div class="col col-md-8 col-lg-10">
+        <a href="#" class="link-offset-1-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"><h5 class="py-2">Product name</h5></a>
+        <div class="bg-light">
+          <div class="d-flex justify-content-between align-items-center p-3">
+            <p class="my-auto">Product</p>
+            <p class="my-auto h5 fw-bold">$18.99</p>
+          </div>
+        </div>
+        <div>
+          <div class="d-flex flex-column gap-2 mt-2">
+            <div class="">
+              <div class="d-flex align-items-center justify-content-start gap-2">
+                <label for="product-quantity" class="form-label mb-0">Quantity</label>
+                <select class="form-select w-auto" id="product-quantity">
+                  <option value="">1</option>
+                  <option value="">2</option>
+                  <option value="">3</option>
+                  <option value="">4</option>
+                  <option value="">5</option>
+                </select>
+              </div>
+            </div>
+            <div class="d-flex gap-2">
+              <button type="button" id="update-button" class="btn btn-primary">Update</button>
+              <button type="button" id="delete-button" class="btn btn-danger">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
