@@ -31,10 +31,32 @@
               </select>
             </div>
 
-            <button type="button" id="add-button" value="" class="btn btn-outline-primary btn">Add to cart</button>
+            <button type="button" id="add-button" value="{{ product.id }}" class="btn btn-outline-primary btn">Add to cart</button>
           </div>
         </div>
       </div>
     </div>
   </section>
+  <script>
+    $(document).on('click', '#add-button', function (e) {
+      e.preventDefault()
+      $.ajax({
+        type: 'POST',
+        url: '{% url "cart_add" %}',
+        data: {
+          product_id: $('#add-button').val(),
+          product_quantity: $('#select option:selected').text(),
+          csrfmiddlewaretoken: '{{csrf_token}}',
+          action: 'post'
+        },
+    
+        success: function (json) {
+          console.log(json)
+          document.getElementById('cart-quantity').textContent = json.cart_quantity
+        },
+    
+        error: function (xhr, errmsg, err) {}
+      })
+    })
+  </script>
 {% endblock %}
