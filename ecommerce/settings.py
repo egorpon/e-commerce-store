@@ -39,8 +39,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "store",
     "cart",
-    "mathfilters"
+    "account",
+    "crispy_forms",
+    "mathfilters",
 ]
+
+CRISPY_TEMPLATE_PACK = 'Bootstrap4'
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -65,7 +69,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "store.views.categories",
-                "cart.context_processors.cart"
+                "cart.context_processors.cart",
             ],
         },
     },

@@ -15,7 +15,7 @@
             <div class="bg-light">
               <div class="d-flex justify-content-between align-items-center p-3">
                 <p class="my-auto">Product</p>
-                <p class="my-auto h5 fw-bold">${{ item.total }}</p>
+                <p class="my-auto h5 fw-bold" id="item-total">${{ item.total }}</p>
               </div>
             </div>
             <div>
@@ -81,9 +81,9 @@
           action: 'post'
         },
         success: function (json) {
-          location.reload()
           document.getElementById('cart-quantity').textContent = json.quantity
           document.getElementById('total').textContent = json.total
+          document.getElementById('item-total').textContent = '$' + json.item_total
         },
         error: function (xhr, errmsg, err) {}
       })

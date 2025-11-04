@@ -59,6 +59,14 @@ def cart_update(request):
 
         cart_total = cart.get_total()
 
-        response = JsonResponse({'quantity': cart_quantity, 'total': cart_total})
+        item_total = cart.get_item_total(product_id)
+
+        response = JsonResponse(
+            {
+                "quantity": cart_quantity,
+                "total": cart_total,
+                "item_total": item_total,
+            }
+        )
 
         return response
