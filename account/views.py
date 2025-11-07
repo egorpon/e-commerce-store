@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-from .forms import CreateUserForm
+from .forms import CreateUserForm, LoginUserForm
 
 from django.contrib.sites.shortcuts import get_current_site
 
@@ -13,6 +13,9 @@ from django.contrib.auth.models import User
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+
+
+from django.contrib.auth import authenticate, login, logout
 
 
 def register(request):
@@ -71,3 +74,27 @@ def email_verification_success(request):
 
 def email_verification_failed(request):
     return render(request, "account/registration/email-verification-failed.html")
+
+
+def login_user(request):
+    form = LoginUserForm()
+    if request.method == "POST":
+        form = LoginUserForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect("dashboard")
+        else:
+            print(form.non_field_errors())
+
+    context = {"form": form}
+    return render(request, "account/login_user.html", context=context)
+
+
+def logout_user(request):
+    logout(request)
+    return redirect("store")
+
+
+def dashboard(request):
+    return render(request, "account/dashboard.html")

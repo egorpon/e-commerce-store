@@ -4,7 +4,9 @@ from . import views
 urlpatterns = [
     path("register/", view=views.register, name="register"),
     path(
-        "email-verification/<str:uidb64>/<str:token>/", view=views.email_verification, name="email_verification"
+        "email-verification/<str:uidb64>/<str:token>/",
+        view=views.email_verification,
+        name="email_verification",
     ),
     path(
         "email-verification-sent/",
@@ -21,4 +23,7 @@ urlpatterns = [
         view=views.email_verification_failed,
         name="email_verification_failed",
     ),
+    path("login-user/", view=views.login_user, name="login_user"),
+    path("logout-user/", views.logout_user, name="logout_user"),
+    path("dashboard/", view=views.dashboard, name="dashboard"),
 ]
