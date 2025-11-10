@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
-from .forms import CreateUserForm, LoginUserForm
+from .forms import CreateUserForm, LoginUserForm, UpdateUserForm
 
 from django.contrib.sites.shortcuts import get_current_site
 
@@ -15,7 +15,8 @@ from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 
 
 def register(request):
@@ -96,5 +97,31 @@ def logout_user(request):
     return redirect("store")
 
 
+@login_required(login_url="login_user")
 def dashboard(request):
     return render(request, "account/dashboard.html")
+
+
+@login_required(login_url="login_user")
+def profile_management(request):
+    if request.method == "POST":
+        user_form = UpdateUserForm(request.POST, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+            return redirect("dashboard")
+
+    user_form = UpdateUserForm(instance=request.user)
+    context = {"user_form": user_form}
+
+    return render(request, "account/profile-management.html", context=context)
+
+
+@login_required(login_url="login_user")
+def delete_account(request):
+    user = User.objects.get(id=request.user.id)
+
+    if request.method == "POST":
+        user.delete()
+        return redirect("store")
+    
+    return render(request, "account/delete-account.html")

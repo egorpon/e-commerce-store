@@ -25,8 +25,18 @@ class CreateUserForm(UserCreationForm):
         return email
 
 
-
 class LoginUserForm(AuthenticationForm):
-
     username = forms.CharField(widget=TextInput())
     password = forms.CharField(widget=PasswordInput())
+
+
+class UpdateUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["username", "email"]
+        exclude = ['password1', 'password2']
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["username"].required = True
+        self.fields["email"].required = True
