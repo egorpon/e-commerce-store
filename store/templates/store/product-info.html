@@ -51,8 +51,11 @@
         },
     
         success: function (json) {
-          console.log(json)
-          document.getElementById('cart-quantity').textContent = json.cart_quantity
+          if (json.cart_quantity > 0) {
+            document.getElementById('cart-quantity').textContent = json.cart_quantity
+            document.getElementById('cart-quantity').classList.remove('d-none')
+            document.getElementById('cart-existance').classList.remove('d-none')
+          }
         },
     
         error: function (xhr, errmsg, err) {}
