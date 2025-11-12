@@ -2,25 +2,31 @@
 {% load static %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <section class="container">
-      <div class="row justify-content-center">
-        <div class="col-12 col-lg-6 col-md-8 p-5">
-          <div class="mb-4">
-            <h3>Login to your account</h3>
-          </div>
+  <section class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-6 col-md-8 p-5">
+        <div class="mb-4">
+          <h3>Login to your account</h3>
+        </div>
 
-          <form action="" method="post">
-            {% csrf_token %}
-            {{ form.username|as_crispy_field }}
-            {{ form.password|as_crispy_field }}
-            {% if form.non_field_errors %}
-              <div class="alert alert-danger my-3">
-              {{form.non_field_errors}}
-            </div>
-            {% endif %}
-            <button type="submit" class="btn btn-light w-100 mt-3">Login</button>
-          </form>
+        <form action="" method="post">
+          {% csrf_token %}
+          {{ form.username|as_crispy_field }}
+          {{ form.password|as_crispy_field }}
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger my-3">{{ form.non_field_errors }}</div>
+          {% endif %}
+          <button type="submit" class="btn btn-light w-100 mt-3">Login</button>
+        </form>
+        <br />
+        <div class="text-center">
+          <a href="{% url 'register' %}">Don't have an acccount?</a>
+        </div>
+        <br />
+        <div class="text-center">
+          <a href="{% url 'reset_password' %}">Forgotten your password?</a>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 {% endblock %}

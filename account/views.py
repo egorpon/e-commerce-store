@@ -84,7 +84,7 @@ def login_user(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect("dashboard")
+            return redirect("profile_management")
         else:
             print(form.non_field_errors())
 
@@ -98,19 +98,14 @@ def logout_user(request):
 
 
 @login_required(login_url="login_user")
-def dashboard(request):
-    return render(request, "account/dashboard.html")
-
-
-@login_required(login_url="login_user")
 def profile_management(request):
+    user_form = UpdateUserForm(instance=request.user)
     if request.method == "POST":
         user_form = UpdateUserForm(request.POST, instance=request.user)
         if user_form.is_valid():
             user_form.save()
-            return redirect("dashboard")
+            return redirect("profile_management")
 
-    user_form = UpdateUserForm(instance=request.user)
     context = {"user_form": user_form}
 
     return render(request, "account/profile-management.html", context=context)
@@ -122,6 +117,6 @@ def delete_account(request):
 
     if request.method == "POST":
         user.delete()
-        return redirect("store")
     
-    return render(request, "account/delete-account.html")
+    return redirect("store")
+
