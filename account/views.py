@@ -85,8 +85,6 @@ def login_user(request):
             user = form.get_user()
             login(request, user)
             return redirect("profile_management")
-        else:
-            print(form.non_field_errors())
 
     context = {"form": form}
     return render(request, "account/login_user.html", context=context)
@@ -117,6 +115,5 @@ def delete_account(request):
 
     if request.method == "POST":
         user.delete()
-    
-    return redirect("store")
 
+    return redirect("store")
