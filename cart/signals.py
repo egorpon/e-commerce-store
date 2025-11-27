@@ -6,22 +6,31 @@ from store.models import Product
 
 @receiver(user_logged_in)
 def merge_cart_on_login(sender, user, request, **kwargs):
-    cart = request.session.get("cart", {})
 
-    if not cart:
+    guest_session_key = getattr(request, 'guest_session_key', None)
+
+    if not guest_session_key:
         return
 
-    for product_id, item in cart.items():
-        product = Product.objects.get(id=product_id)
-        cart_item, created = CartItem.objects.get_or_create(
-            user=user,
-            product=product,
-            defaults={"quantity": item["quantity"]},
-        )
+    guest_cart_items = CartItem.objects.filter(
+        session_key=guest_session_key, user=None
+    )
 
-        if not created:
-            cart_item.quantity = item["quantity"]
-            cart_item.save()
+    if not guest_cart_items.exists():
+        return
 
-    del request.session["cart"]
-    request.session.modified = True
+    for guest_item in guest_cart_items:
+        user_item = CartItem.objects.filter(user=user, product=guest_item.product).first()
+
+        if user_item:
+
+            user_item.quantity = guest_item.quantity
+            user_item.save()
+            
+            guest_item.delete()
+        else:
+
+            guest_item.user = user
+            guest_item.session_key = None
+            guest_item.save()
+
