@@ -18,6 +18,8 @@ from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 
+from django.contrib import messages
+
 
 def register(request):
     form = CreateUserForm()
@@ -78,7 +80,6 @@ def email_verification_failed(request):
 
 
 def login_user(request):
-
     request.guest_session_key = request.session.session_key
 
     form = LoginUserForm()
@@ -95,6 +96,7 @@ def login_user(request):
 
 def logout_user(request):
     logout(request)
+    messages.success(request, "Logout success!")
     return redirect("store")
 
 
@@ -105,6 +107,7 @@ def profile_management(request):
         user_form = UpdateUserForm(request.POST, instance=request.user)
         if user_form.is_valid():
             user_form.save()
+            messages.info(request, "Account has been updated!")
             return redirect("profile_management")
 
     context = {"user_form": user_form}
@@ -117,6 +120,6 @@ def delete_account(request):
     user = User.objects.get(id=request.user.id)
 
     if request.method == "POST":
+        messages.error(request, "Account has been deleted!")
         user.delete()
-
-    return redirect("store")
+        return redirect("store")
