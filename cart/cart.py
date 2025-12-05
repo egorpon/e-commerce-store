@@ -1,17 +1,9 @@
 from decimal import Decimal, ROUND_HALF_UP
 
-from store.models import Product
-
-from copy import deepcopy
-
-from .models import CartItem
-
-from django.db.models import Sum, F, ExpressionWrapper, DecimalField
-
-from django.db.models.functions import Round
+from .models import Cart, CartItem
 
 
-class Cart:
+class CartService:
     def __init__(self, request):
         self.request = request
         self.session = request.session
@@ -20,121 +12,69 @@ class Cart:
         if not self.session.session_key:
             self.session.create()
 
-    def add(self, product, product_quantity):
+        self.cart = self._get_existing_cart()
+
+    def _get_existing_cart(self):
         if self.user.is_authenticated:
-            cart_item, created = CartItem.objects.get_or_create(
-                user=self.user, product=product, defaults={"quantity": product_quantity}
-            )
+            return Cart.objects.filter(user=self.user).first()
         else:
-            cart_item, created = CartItem.objects.get_or_create(
-                session_key=self.session.session_key,
-                user=None,
-                product=product,
-                defaults={"quantity": product_quantity},
+            return Cart.objects.filter(session_key=self.session.session_key, user=None).first()
+
+    def _create_cart(self):
+        if self.user.is_authenticated:
+            return Cart.objects.create(user=self.user)
+        else:
+            return Cart.objects.create(
+                session_key=self.session.session_key, user=None
             )
 
+    def add(self, product, product_quantity):
+        if not self.cart:
+            self.cart = self._create_cart()
+        cart_item, created = CartItem.objects.get_or_create(
+            cart=self.cart, product=product, defaults={"quantity": product_quantity}
+        )
         if not created:
             cart_item.quantity = product_quantity
         cart_item.save()
 
     def delete(self, product_id):
-        if self.user.is_authenticated:
-            cart_item = CartItem.objects.filter(
-                user=self.user, product__id=product_id
-            ).first()
-            cart_item.delete()
-        else:
-            cart_item = CartItem.objects.filter(
-                session_key=self.session.session_key, product__id=product_id
-            ).first()
-            cart_item.delete()
+        cart_item = CartItem.objects.filter(
+            cart=self.cart, product__id=product_id
+        ).first()
+        cart_item.delete()
 
     def update(self, product_id, product_quantity):
-        if self.user.is_authenticated:
-            cart_item = CartItem.objects.filter(
-                user=self.user, product__id=product_id
-            ).first()
-        else:
-            cart_item = CartItem.objects.filter(
-                session_key=self.session.session_key, product__id=product_id
-            ).first()
+        cart_item = CartItem.objects.filter(
+            cart=self.cart, product__id=product_id
+        ).first()
 
         if cart_item:
             cart_item.quantity = product_quantity
-            cart_item.save()
+        cart_item.save()
 
     def __len__(self):
-        if self.user.is_authenticated:
-            qs = CartItem.objects.filter(user=self.user)
-        else:
-            qs = CartItem.objects.filter(session_key=self.session.session_key)
-        cart = qs.aggregate(total_count=Sum("quantity"))
-
-        return cart["total_count"] or 0
+        if not self.cart:
+            return 0
+        return self.cart.total_quantity
 
     def __iter__(self):
-        if self.user.is_authenticated:
-            all_products = CartItem.objects.filter(user=self.user)
-        else:
-            all_products = CartItem.objects.filter(session_key=self.session.session_key)
+        all_products = self.cart.items.all()
         for item in all_products:
             yield {
                 "product": item.product,
                 "quantity": item.quantity,
-                "total": Decimal(item.product.price) * item.quantity,
+                "total": item.item_total_price,
             }
 
     def get_total(self):
-        if self.user.is_authenticated:
-            qs = CartItem.objects.filter(user=self.user)
-        else:
-            qs = CartItem.objects.filter(session_key=self.session.session_key)
-        cart = qs.aggregate(
-            total=Sum(
-                ExpressionWrapper(
-                    F("product__price") * F("quantity"),
-                    output_field=DecimalField(max_digits=10, decimal_places=2),
-                )
-            )
-        )
-        if cart["total"] is None:
-            return Decimal("0.00")
-
-        return cart["total"].quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        if not self.cart:
+            return 0
+        return self.cart.total_price
 
     def get_item_total(self, product_id):
-        if self.user.is_authenticated:
-            qs = CartItem.objects.filter(user=self.user, product__id=product_id)
-        else:
-            qs = CartItem.objects.filter(
-                session_key=self.session.session_key, product__id=product_id
-            )
-        qs = qs.annotate(
-            total=ExpressionWrapper(
-                F("product__price") * F("quantity"),
-                output_field=DecimalField(max_digits=10, decimal_places=2),
-            )
-        )
-        cart = qs.first()
+        item = self.cart.items.filter(product__id = product_id).first()
 
-        if not cart:
+        if not item:
             return Decimal("0.00")
-        return cart.total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-
-# d = {
-#     "cart": {
-#         "1": {
-#             "price": Decimal(2.99),
-#             "quantity": 3,
-#             "product": Product(...),
-#             "total": 8.97,
-#         },
-#         "3": {
-#             "price": Decimal(19.99),
-#             "quantity": 1,
-#             "product": Product(...),
-#             "total": 19.99,
-#         },
-#     }
-# }
+        return item.item_total_price.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from .cart import Cart
+from .cart import CartService
 from store.models import Product
 from django.shortcuts import get_object_or_404
 
@@ -9,12 +9,12 @@ from django.http import JsonResponse
 
 
 def cart_summary(request):
-    cart = Cart(request)
+    cart = CartService(request)
     return render(request, "cart/cart-summary.html", {"cart": cart})
 
 
 def cart_add(request):
-    cart = Cart(request)
+    cart = CartService(request)
 
     if request.POST.get("action") == "post":
         product_id = int(request.POST.get("product_id"))
@@ -32,7 +32,7 @@ def cart_add(request):
 
 
 def cart_delete(request):
-    cart = Cart(request)
+    cart = CartService(request)
 
     if request.POST.get("action") == "post":
         product_id = int(request.POST.get("product_id"))
@@ -48,7 +48,7 @@ def cart_delete(request):
 
 
 def cart_update(request):
-    cart = Cart(request)
+    cart = CartService(request)
 
     if request.POST.get("action") == "post":
         product_id = int(request.POST.get("product_id"))

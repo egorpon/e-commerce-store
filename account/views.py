@@ -81,7 +81,6 @@ def email_verification_failed(request):
 
 def login_user(request):
     request.guest_session_key = request.session.session_key
-
     form = LoginUserForm()
     if request.method == "POST":
         form = LoginUserForm(request, data=request.POST)

@@ -1,4 +1,4 @@
-from .cart import Cart
+from .cart import CartService
 
 def cart(request):
-    return {"cart": Cart(request)}
+    return {"cart": CartService(request)}
