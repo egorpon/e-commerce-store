@@ -3,6 +3,10 @@ from django.http import HttpResponse
 
 from .forms import CreateUserForm, LoginUserForm, UpdateUserForm
 
+from payment.forms import ShippingForm
+
+from payment.models import ShippingAddress
+
 from django.contrib.sites.shortcuts import get_current_site
 
 from .token import email_token_generator
@@ -122,3 +126,22 @@ def delete_account(request):
         messages.error(request, "Account has been deleted!")
         user.delete()
         return redirect("store")
+
+
+@login_required(login_url="login_user")
+def manage_shipping(request):
+    shipping = ShippingAddress.objects.filter(user=request.user).first()
+
+    form = ShippingForm(instance=shipping)
+
+    if request.method == "POST":
+        form = ShippingForm(request.POST, instance=shipping)
+
+        if form.is_valid():
+            shipping_user = form.save(commit=False)
+            shipping_user.user = request.user
+            shipping_user.save()
+            messages.info(request, "Shipping address has been updated!")
+            return redirect("manage_shipping")
+
+    return render(request, "account/manage-shipping.html", {"form": form})

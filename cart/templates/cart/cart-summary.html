@@ -15,7 +15,7 @@
             <div class="bg-light">
               <div class="d-flex justify-content-between align-items-center p-3">
                 <p class="my-auto">Product</p>
-                <p class="my-auto h5 fw-bold" id="item-total-{{product.id}}">${{ item.total }}</p>
+                <p class="my-auto h5 fw-bold" id="item-total-{{ product.id }}">${{ item.total }}</p>
               </div>
             </div>
             <div>
@@ -47,6 +47,7 @@
       <div class="h5 fw-bold">
         Sub total: $<div id="total" class="d-inline-flex">{{ cart.get_total }}</div>
       </div>
+      <a role="button" class="btn btn-outline-primary my-3" href="{% url 'checkout' %}">Proceed to checkout</a>
     </div>
   </section>
   <script>
@@ -84,7 +85,7 @@
         success: function (json) {
           document.getElementById('cart-quantity').textContent = json.quantity
           document.getElementById('total').textContent = json.total
-          document.getElementById('item-total-'+ product_id).textContent = '$' + json.item_total
+          document.getElementById('item-total-' + product_id).textContent = '$' + json.item_total
         },
         error: function (xhr, errmsg, err) {}
       })

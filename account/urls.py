@@ -33,22 +33,31 @@ urlpatterns = [
     path("delete/", view=views.delete_account, name="delete_account"),
     path(
         "reset-password/",
-        view=auth_views.PasswordResetView.as_view(template_name='account/password/password-reset.html'),
+        view=auth_views.PasswordResetView.as_view(
+            template_name="account/password/password-reset.html"
+        ),
         name="reset_password",
     ),
     path(
         "reset-password-sent/",
-        view=auth_views.PasswordResetDoneView.as_view(template_name='account/password/password-reset-sent.html'),
+        view=auth_views.PasswordResetDoneView.as_view(
+            template_name="account/password/password-reset-sent.html"
+        ),
         name="password_reset_done",
     ),
     path(
         "reset/<str:uidb64>/<str:token>/",
-        view=auth_views.PasswordResetConfirmView.as_view(template_name='account/password/password-reset-form.html'),
+        view=auth_views.PasswordResetConfirmView.as_view(
+            template_name="account/password/password-reset-form.html"
+        ),
         name="password_reset_confirm",
     ),
     path(
         "reset-password-complete/",
-        view=auth_views.PasswordResetCompleteView.as_view(template_name='account/password/password-reset-complete.html'),
+        view=auth_views.PasswordResetCompleteView.as_view(
+            template_name="account/password/password-reset-complete.html"
+        ),
         name="password_reset_complete",
     ),
+    path("manage-shipping/", view=views.manage_shipping, name="manage_shipping"),
 ]
