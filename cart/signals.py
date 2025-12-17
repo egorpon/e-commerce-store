@@ -29,11 +29,3 @@ def merge_cart_on_login(sender, user, request, **kwargs):
 
     guest_cart.delete()
 
-
-@receiver(post_delete, sender=CartItem)
-def delete_empty_cart(sender, instance, **kwargs):
-
-    cart = instance.cart
-
-    if not CartItem.objects.filter(cart=cart).exists():
-        cart.delete()

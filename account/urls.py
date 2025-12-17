@@ -60,4 +60,5 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path("manage-shipping/", view=views.manage_shipping, name="manage_shipping"),
+    path("my-orders/", view=views.my_orders, name="my_orders"),
 ]

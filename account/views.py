@@ -24,6 +24,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib import messages
 
+from payment.models import Order, OrderItem
 
 def register(request):
     form = CreateUserForm()
@@ -145,3 +146,9 @@ def manage_shipping(request):
             return redirect("manage_shipping")
 
     return render(request, "account/manage-shipping.html", {"form": form})
+
+@login_required(login_url='login_user')
+def my_orders(request):
+
+    orders  = Order.objects.filter(user=request.user)
+    return render(request, 'account/my-orders.html', {"orders": orders})

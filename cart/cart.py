@@ -59,6 +59,8 @@ class CartService:
         return self.cart.total_quantity
 
     def __iter__(self):
+        if not self.cart:
+            return
         all_products = self.cart.items.all()
         for item in all_products:
             yield {
