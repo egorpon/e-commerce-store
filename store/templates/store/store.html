@@ -1,22 +1,40 @@
 {% extends './base.html' %}
 {% load static %}
 {% block content %}
-  <section class="py-4 text-center container">
-    <div class="row py-5">
-      <div class="col-lg-8 col-md-6 col-sm-5 mx-auto">
-        <h2>MyStore... Shop smart. Live simple.</h2>
-        <h5 class="lead text-muted mt-3 mb-3">Explore our extensive collection.</h5>
-        <a href="{% url 'register' %}" class="btn btn-primary my-3">
-          <div class="d-flex align-items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 640 512">
-              <!-- !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc. -->
-              <path fill="#ffffff" d="M136 128a120 120 0 1 1 240 0 120 120 0 1 1 -240 0zM48 482.3C48 383.8 127.8 304 226.3 304l59.4 0c98.5 0 178.3 79.8 178.3 178.3 0 16.4-13.3 29.7-29.7 29.7L77.7 512C61.3 512 48 498.7 48 482.3zM544 96c13.3 0 24 10.7 24 24l0 48 48 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-48 0 0 48c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-48-48 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0 0-48c0-13.3 10.7-24 24-24z" />
-            </svg>Create an account
-          </div>
-        </a>
+  {% if not user.is_authenticated %}
+    <section class="py-4 text-center container">
+      <div class="row py-5">
+        <div class="col-lg-8 col-md-6 col-sm-5 mx-auto">
+          <h2>MyStore... Shop smart. Live simple.</h2>
+          <h5 class="lead text-muted mt-3 mb-3">Explore our extensive collection.</h5>
+          <a href="{% url 'register' %}" class="btn btn-primary my-3">
+            <div class="d-flex align-items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 640 512">
+                <!-- !Font Awesome Free v7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc. -->
+                <path fill="#ffffff" d="M136 128a120 120 0 1 1 240 0 120 120 0 1 1 -240 0zM48 482.3C48 383.8 127.8 304 226.3 304l59.4 0c98.5 0 178.3 79.8 178.3 178.3 0 16.4-13.3 29.7-29.7 29.7L77.7 512C61.3 512 48 498.7 48 482.3zM544 96c13.3 0 24 10.7 24 24l0 48 48 0c13.3 0 24 10.7 24 24s-10.7 24-24 24l-48 0 0 48c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-48-48 0c-13.3 0-24-10.7-24-24s10.7-24 24-24l48 0 0-48c0-13.3 10.7-24 24-24z" />
+              </svg>Create an account
+            </div>
+          </a>
+        </div>
       </div>
+    </section>
+  {% else %}
+    <div id="shopCarousel" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img src="{% static 'media/images/winter_sale.png' %}" class="d-block w-100 shop-slide-img" alt="" />
+        </div>
+
+        <div class="carousel-item">
+          <img src="../static/media/images/winter_sale_2.png" class="d-block w-100 shop-slide-img" alt="" />
+        </div>
+      </div>
+
+      <button class="carousel-control-prev" type="button" data-bs-target="#shopCarousel" data-bs-slide="prev"><span class="carousel-control-prev-icon"></span></button>
+
+      <button class="carousel-control-next" type="button" data-bs-target="#shopCarousel" data-bs-slide="next"><span class="carousel-control-next-icon"></span></button>
     </div>
-  </section>
+  {% endif %}
 
   <section class="album py-5 border-secondary">
     <div class="container">

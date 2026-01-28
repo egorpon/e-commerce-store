@@ -2,3 +2,19 @@
     width: 50%
 }
 
+
+#shopCarousel {
+  height: 350px;         
+  overflow: hidden;      
+}
+
+#shopCarousel .carousel-inner,
+#shopCarousel .carousel-item {
+  height: 100%;
+}
+
+.shop-slide-img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;   
+}
