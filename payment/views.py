@@ -58,8 +58,6 @@ def complete_order(request):
             filter(None, [address1, address2, city, state, zipcode])
         )
 
-        print(shipping_address)
-
         cart = CartService(request)
 
         total_cost = cart.get_total()
