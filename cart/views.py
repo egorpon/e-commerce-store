@@ -9,6 +9,8 @@ from django.http import JsonResponse
 # Create your views here.
 from cart.models import CartItem, Cart
 
+from django.contrib import messages
+
 
 def cart_summary(request):
     cart = CartService(request)
@@ -26,9 +28,16 @@ def cart_add(request):
 
         cart_service.add(product=product, product_quantity=product_quantity)
 
+
         cart_quantity = cart_service.__len__()
 
-        response = JsonResponse({"cart_quantity": cart_quantity})
+        response = JsonResponse(
+            {
+                "cart_quantity": cart_quantity,
+                "message": f"{product.title} added to cart",
+                "status": "success",
+            }
+        )
 
         return response
 
@@ -43,12 +52,11 @@ def cart_delete(request):
         cart_quantity = cart_service.__len__()
 
         cart_total = cart_service.get_total()
-        
+
         cart_quantity = CartItem.objects.filter(cart=cart_service.cart).count()
 
         if cart_quantity == 0:
             cart_service.cart.delete()
-        
 
         response = JsonResponse({"quantity": cart_quantity, "total": cart_total})
         return response
