@@ -9,7 +9,6 @@ from django.http import JsonResponse
 # Create your views here.
 from cart.models import CartItem, Cart
 
-from django.contrib import messages
 
 
 def cart_summary(request):

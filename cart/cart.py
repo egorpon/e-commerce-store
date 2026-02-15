@@ -2,6 +2,8 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from .models import Cart, CartItem
 
+from coupon.discount import DiscountStrategy
+
 
 class CartService:
     def __init__(self, request):
@@ -18,15 +20,15 @@ class CartService:
         if self.user.is_authenticated:
             return Cart.objects.filter(user=self.user).first()
         else:
-            return Cart.objects.filter(session_key=self.session.session_key, user=None).first()
+            return Cart.objects.filter(
+                session_key=self.session.session_key, user=None
+            ).first()
 
     def _create_cart(self):
         if self.user.is_authenticated:
             return Cart.objects.create(user=self.user)
         else:
-            return Cart.objects.create(
-                session_key=self.session.session_key, user=None
-            )
+            return Cart.objects.create(session_key=self.session.session_key, user=None)
 
     def add(self, product, product_quantity):
         if not self.cart:
@@ -75,8 +77,14 @@ class CartService:
         return self.cart.total_price
 
     def get_item_total(self, product_id):
-        item = self.cart.items.filter(product__id = product_id).first()
+        item = self.cart.items.filter(product__id=product_id).first()
 
         if not item:
             return Decimal("0.00")
         return item.item_total_price.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+    def get_new_total(self, strategy: DiscountStrategy):
+        return strategy.apply_discount(self.get_total()).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+    def discount_amount(self, strategy: DiscountStrategy):
+        return self.get_total() - self.get_new_total(strategy)

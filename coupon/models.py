@@ -1,6 +1,6 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from datetime import date
+from django.utils import timezone
 
 # Create your models here.
 
@@ -27,3 +27,11 @@ class Coupon(models.Model):
 
     def __str__(self):
         return self.title
+    
+    
+    def is_valid(self):
+        today = timezone.now().date()
+        if not self.valid_from <= today <= self.valid_to:
+            return False
+        return True
+        
