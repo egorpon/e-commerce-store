@@ -2,7 +2,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from .models import Cart, CartItem
 
-from coupon.discount import DiscountStrategy
+from coupon.discount import DiscountStrategy, get_discount_strategy
 
 
 class CartService:
@@ -83,8 +83,14 @@ class CartService:
             return Decimal("0.00")
         return item.item_total_price.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
-    def get_new_total(self, strategy: DiscountStrategy):
-        return strategy.apply_discount(self.get_total()).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    def get_new_total(self):
+        if self.cart.coupon:
+            strategy = get_discount_strategy(self.cart.coupon)
+            return strategy.apply_discount(self.get_total()).quantize(
+                Decimal("0.01"), rounding=ROUND_HALF_UP
+            )
+        return self.get_total()
 
-    def discount_amount(self, strategy: DiscountStrategy):
-        return self.get_total() - self.get_new_total(strategy)
+    def discount_amount(self):
+        if self.cart.coupon:
+            return self.get_total() - self.get_new_total()

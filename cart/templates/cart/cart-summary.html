@@ -87,11 +87,18 @@
           Sub total: $
           <div id="total" class="d-inline">{{ cart.get_total }}</div>
         </div>
-        <div id="discount-amount" class="d-inline h5 fw-bold d-none"></div>
-        <div
-          id="new-total"
-          class="d-inline h3 fw-bold d-none text-danger"
-        ></div>
+
+        {% if cart.cart.coupon %}
+        <div id="discount-amount" class="h5 fw-bold">
+          -{{ cart.discount_amount }}
+        </div>
+        <div id="new-total" class="h3 fw-bold text-danger">
+          ${{ cart.get_new_total }}
+        </div>
+        {% else %}
+        <div id="discount-amount" class="d-none h5 fw-bold"></div>
+        <div id="new-total" class="d-none h3 fw-bold text-danger"></div>
+        {% endif %}
       </div>
       <a
         role="button"
@@ -138,6 +145,18 @@
         location.reload();
         document.getElementById("cart-quantity").textContent = json.quantity;
         document.getElementById("total").textContent = json.total;
+        const newTotal = document.getElementById("new-total");
+        const discountAmount = document.getElementById("discount-amount");
+
+        if (discountAmount && json.discount_amount !== undefined) {
+          discountAmount.textContent = `-` + json.discount_amount;
+          discountAmount.classList.remove("d-none");
+        }
+
+        if (newTotal && json.new_total !== undefined) {
+          newTotal.textContent = `$` + json.new_total;
+          newTotal.classList.remove("d-none");
+        }
       },
       error: function (xhr, errmsg, err) {},
     });
@@ -162,6 +181,19 @@
         document.getElementById("total").textContent = json.total;
         document.getElementById("item-total-" + product_id).textContent =
           "$" + json.item_total;
+
+        const newTotal = document.getElementById("new-total");
+        const discountAmount = document.getElementById("discount-amount");
+
+        if (discountAmount && json.discount_amount !== undefined) {
+          discountAmount.textContent = `-` + json.discount_amount;
+          discountAmount.classList.remove("d-none");
+        }
+
+        if (newTotal && json.new_total !== undefined) {
+          newTotal.textContent = `$` + json.new_total;
+          newTotal.classList.remove("d-none");
+        }
       },
       error: function (xhr, errmsg, err) {},
     });

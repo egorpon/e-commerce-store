@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from .models import Coupon
 from cart.models import Cart
 from cart.cart import CartService
-from .discount import get_discount_strategy
 
 # Create your views here.
 
@@ -11,6 +10,14 @@ from .discount import get_discount_strategy
 def apply_discount(request):
     if request.POST.get("action") == "post":
         title = str(request.POST.get("code")).strip()
+
+        if title == "":
+            return JsonResponse(
+                {
+                    "message": f"Please enter a correct promo code",
+                    "status": "danger",
+                }
+            )
 
         try:
             coupon = Coupon.objects.get(title=title, is_active=True)
@@ -23,17 +30,25 @@ def apply_discount(request):
                     }
                 )
 
-            request.session["coupon_id"] = coupon.id
-
             cart = CartService(request)
-            strategy = get_discount_strategy(coupon)
+
+            if cart.cart.coupon:
+                return JsonResponse(
+                    {
+                        "message": f"A promo code is already applied",
+                        "status": "danger",
+                    }
+                )
+
+            cart.cart.coupon = coupon
+            cart.cart.save()
 
             return JsonResponse(
                 {
                     "message": f"Promo code applied",
                     "status": "success",
-                    "new_total": cart.get_new_total(strategy),
-                    "discount_amount": cart.discount_amount(strategy),
+                    "new_total": cart.get_new_total(),
+                    "discount_amount": cart.discount_amount(),
                 }
             )
 

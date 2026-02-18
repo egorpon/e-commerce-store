@@ -10,7 +10,6 @@ from django.http import JsonResponse
 from cart.models import CartItem, Cart
 
 
-
 def cart_summary(request):
     cart = CartService(request)
     return render(request, "cart/cart-summary.html", {"cart": cart})
@@ -26,7 +25,6 @@ def cart_add(request):
         product = get_object_or_404(Product, id=product_id)
 
         cart_service.add(product=product, product_quantity=product_quantity)
-
 
         cart_quantity = cart_service.__len__()
 
@@ -57,12 +55,18 @@ def cart_delete(request):
         if cart_quantity == 0:
             cart_service.cart.delete()
 
-        response = JsonResponse({"quantity": cart_quantity, "total": cart_total})
+        response = JsonResponse(
+            {
+                "quantity": cart_quantity,
+                "total": cart_total,
+            }
+        )
         return response
 
 
 def cart_update(request):
     cart_service = CartService(request)
+    cart = cart_service.cart
 
     if request.POST.get("action") == "post":
         product_id = int(request.POST.get("product_id"))
@@ -75,12 +79,23 @@ def cart_update(request):
 
         item_total = cart_service.get_item_total(product_id)
 
+        if cart.coupon:
+            return JsonResponse(
+                {
+                    "quantity": cart_quantity,
+                    "total": cart_total,
+                    "item_total": item_total,
+                    "discount_amount": cart_service.discount_amount(),
+                    "new_total": cart_service.get_new_total(),
+                }
+            )
+
         response = JsonResponse(
             {
                 "quantity": cart_quantity,
                 "total": cart_total,
                 "item_total": item_total,
-            }
+             }
         )
 
         return response
