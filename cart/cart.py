@@ -84,7 +84,7 @@ class CartService:
         return item.item_total_price.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     def get_new_total(self):
-        if self.cart.coupon:
+        if self.cart and self.cart.coupon:
             strategy = get_discount_strategy(self.cart.coupon)
             return strategy.apply_discount(self.get_total()).quantize(
                 Decimal("0.01"), rounding=ROUND_HALF_UP

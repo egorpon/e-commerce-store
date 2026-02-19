@@ -60,7 +60,7 @@ def complete_order(request):
 
         cart = CartService(request)
 
-        total_cost = cart.get_total()
+        total_cost = cart.get_new_total()
         product_list = []
 
         if request.user.is_authenticated:
