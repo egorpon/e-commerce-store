@@ -3,11 +3,15 @@ from .models import Category, Product
 
 from django.shortcuts import get_object_or_404
 
+from promotion.models import Discount
+
 # Create your views here.
 
 
 def store(request):
-    all_products = Product.objects.all()
+    all_products = Product.objects.all().prefetch_related(
+        "discounts", "category__category_discounts"
+    )
     context = {"all_products": all_products}
     return render(request, "store/store.html", context=context)
 
@@ -27,4 +31,5 @@ def list_category(request, category_slug=None):
 def product_info(request, product_slug):
     product = get_object_or_404(Product, slug=product_slug)
     context = {"product": product}
+
     return render(request, "store/product-info.html", context=context)

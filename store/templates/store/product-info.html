@@ -2,13 +2,25 @@
 <section class="container py-5">
   <div class="row g-4">
     <div class="col-lg-5 col-md-6 col-sm-12 order-md-first bg-light">
+      
+    <div class="rounded position-relative">
+      {% if product.has_discount %}
+          <span class="position-absolute top-0 start-0 badge rounded-pill bg-danger m-3 shadow">
+            SALE
+          </span>
+        {% endif %}
+      
       <img
         class="img-fluid d-block mx-auto"
         src="{{ product.image.url }}"
         alt="Responsive image"
       />
     </div>
+    </div>
     <div class="col-lg-7 col-md-6 col-sm-12 ps-lg-5 ps-md-5">
+      {% if product.has_discount %}
+        <span class="badge rounded-pill bg-danger my-3">-{{ product.discount_percent }}%</span>
+        {% endif %}
       <h4 class="mb-0">{{ product.title }}</h4>
       <strong>{{ product.brand }}</strong>
       <br />
@@ -17,7 +29,16 @@
       <div class="bg-light border-0 p-3">
         <div class="d-flex align-items-center justify-content-between">
           <p class="mb-0">Price</p>
-          <p class="text-end fw-bold fs-3 mb-0">${{ product.price }}</p>
+          {% if product.has_discount %}
+          <div class="d-flex align-items-center gap-2">
+            <h5 class="mb-0 text-danger fw-bold fs-3">$ {{ product.sell_price }}</h5>
+          <span class="text-muted text-decoration-line-through fs-5">$ {{ product.price }}</span>
+
+          </div>  
+          
+          {% else %}
+          <p class="text-end fw-bold fs-5 mb-0">${{ product.price }}</p>
+          {% endif %}
         </div>
       </div>
       <div class="p-3">

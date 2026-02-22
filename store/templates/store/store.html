@@ -43,12 +43,26 @@
         {% for product in all_products %}
           <div class="col d-flex justify-content-center">
             <div class="card border-secondary mb-3 h-100" style="width: 18rem;">
+              {% if product.has_discount %}
+                    <span class="position-absolute top-0 end-75 badge rounded-pill bg-danger m-2">
+                      -{{ product.discount_percent }}%
+                    </span>
+              {% endif %}
               <img class="img-fluid" src="{{ product.image.url }}" alt="" />
               <div class="card-body d-flex flex-column">
                 <a class="card-title h4 link-offset-1-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover" href="{{ product.get_absolute_url }}">{{ product.title }}</a>
-                <div class="d-flex justify-content-between align-items-center mt-auto">
+                
+                {% if product.has_discount %}
+                <div class="d-flex gap-3 align-items-center mt-auto">
+                  <h5 class="mb-0 text-danger fw-bold fs-3">$ {{ product.sell_price }}</h5>
+                  <span class="text-muted text-decoration-line-through small">$ {{ product.price }}</span>
+                </div>
+                  {% else %}
+                  <div class="d-flex justify-content-between align-items-center mt-auto">
                   <h5 class="mb-0">$ {{ product.price }}</h5>
                 </div>
+                {% endif %}
+                
               </div>
             </div>
           </div>
