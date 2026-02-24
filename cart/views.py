@@ -12,6 +12,7 @@ from cart.models import CartItem, Cart
 
 def cart_summary(request):
     cart = CartService(request)
+
     return render(request, "cart/cart-summary.html", {"cart": cart})
 
 
@@ -78,6 +79,7 @@ def cart_update(request):
         cart_total = cart_service.get_total()
 
         item_total = cart_service.get_item_total(product_id)
+        
 
         if cart.coupon:
             return JsonResponse(
@@ -87,6 +89,7 @@ def cart_update(request):
                     "item_total": item_total,
                     "discount_amount": cart_service.discount_amount(),
                     "new_total": cart_service.get_new_total(),
+                    
                 }
             )
 
@@ -95,7 +98,7 @@ def cart_update(request):
                 "quantity": cart_quantity,
                 "total": cart_total,
                 "item_total": item_total,
-             }
+            }
         )
 
         return response

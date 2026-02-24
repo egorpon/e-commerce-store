@@ -36,7 +36,7 @@ class CartItem(models.Model):
 
     @property
     def item_total_price(self):
-        return Decimal(self.product.price) * self.quantity
+        return Decimal(self.product.sell_price) * self.quantity
 
     def __str__(self):
         return f"{self.product.title} X {self.quantity}"
