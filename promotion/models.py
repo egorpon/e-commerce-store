@@ -32,8 +32,6 @@ class Discount(models.Model):
 
     def is_valid(self):
         today = timezone.now()
-        if not self.valid_from <= today <= self.valid_to:
-            return False
-        return True
+        return self.valid_from <= today <= self.valid_to
 
  

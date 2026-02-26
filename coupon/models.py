@@ -6,7 +6,7 @@ from django.utils import timezone
 
 
 class Coupon(models.Model):
-    class TypeChoice(models.Choices):
+    class TypeChoice(models.TextChoices):
         PERCENT = "Percent"
         FIXED = "Fixed"
 

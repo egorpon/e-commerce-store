@@ -8,6 +8,8 @@ from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.conf import settings
 
+from decimal import Decimal
+
 # Create your views here.
 
 
@@ -63,65 +65,48 @@ def complete_order(request):
         total_cost = cart.get_new_total()
         product_list = []
 
-        if request.user.is_authenticated:
-            order = Order.objects.create(
-                full_name=name,
-                email=email,
-                shipping_address=shipping_address,
-                amount_paid=total_cost,
-                user=request.user,
-            )
-
-            for item in cart:
-                OrderItem.objects.create(
-                    order=order,
-                    product=item["product"],
-                    quantity=item["quantity"],
-                    price=item["total"],
-                )
-                product_list.append(
-                    {"name": item["product"].title, "quantity": item["quantity"]}
-                )
-
-        else:
-            order = Order.objects.create(
-                full_name=name,
-                email=email,
-                shipping_address=shipping_address,
-                amount_paid=total_cost,
-            )
-            for item in cart:
-                OrderItem.objects.create(
-                    order=order,
-                    product=item["product"],
-                    quantity=item["quantity"],
-                    price=item["total"],
-                )
-                product_list.append(
-                    {"name": item["product"].title, "quantity": item["quantity"]}
-                )
-
-        body = (
-            "Hi!\n\n"
-            + "Thank you for placing your order\n\n"
-            + "Please see your order below:\n\n\n"
-            + "\n".join(
-                f"{product['name']} X {product['quantity']}\n"
-                for product in product_list
-            )
-            + f"\n\nTotal paid: ${cart.get_total()}"
+        order = Order.objects.create(
+            full_name=name,
+            email=email,
+            shipping_address=shipping_address,
+            amount_paid=total_cost,
+            user=request.user if request.user.is_authenticated else None,
         )
 
-        send_mail(
-            "Order received",
-            body,
-            settings.EMAIL_HOST_USER,
-            [email],
-            fail_silently=False,
-        )
+        for item in cart:
+            OrderItem.objects.create(
+                order=order,
+                product=item["product"],
+                quantity=item["quantity"],
+                price=item["total"],
+            )
+            product_list.append(
+                {"name": item["product"].title, "quantity": item["quantity"]}
+            )
 
+        send_order_confirmation_email(total_cost, product_list, email)
         order_success = True
 
         response = JsonResponse({"success": order_success})
 
         return response
+
+
+def send_order_confirmation_email(total_cost: Decimal, products: list, email: str):
+    body = (
+        "Hi!\n\n"
+        + "Thank you for placing your order\n\n"
+        + "Please see your order below:\n\n\n"
+        + "\n".join(
+            f"{product['name']} X {product['quantity']}\n" for product in products
+        )
+        + f"\n\nTotal paid: ${total_cost}"
+    )
+
+    send_mail(
+        "Order received",
+        body,
+        settings.EMAIL_HOST_USER,
+        [email],
+        fail_silently=False,
+    )
