@@ -1,12 +1,12 @@
 from django.test import TestCase
-from .factory import (
+from ..factory import (
     UserFactory,
     CategoryFactory,
     ProductFactory,
     CartFactory,
     CartItemFactory,
 )
-from .models import Cart, CartItem
+from ..models import Cart, CartItem
 from django.urls import reverse
 
 # Create your tests here.
