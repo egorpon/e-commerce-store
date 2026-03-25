@@ -27,7 +27,7 @@ def cart_add(request):
 
         cart_service.add(product=product, product_quantity=product_quantity)
 
-        cart_quantity = cart_service.__len__()
+        cart_quantity = len(cart_service)
 
         response = JsonResponse(
             {
@@ -47,7 +47,7 @@ def cart_delete(request):
 
         cart_service.delete(product_id)
 
-        cart_quantity = cart_service.__len__()
+        cart_quantity = len(cart_service)
 
         cart_total = cart_service.get_total()
 
@@ -74,7 +74,7 @@ def cart_update(request):
         product_quantity = int(request.POST.get("product_quantity"))
         cart_service.update(product_id, product_quantity)
 
-        cart_quantity = cart_service.__len__()
+        cart_quantity = len(cart_service)
 
         cart_total = cart_service.get_total()
 
