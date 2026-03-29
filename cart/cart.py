@@ -86,9 +86,7 @@ class CartService:
     def get_new_total(self):
         if self.cart and self.cart.coupon:
             strategy = get_discount_strategy(self.cart.coupon)
-            return strategy.apply_discount(self.get_total()).quantize(
-                Decimal("0.01"), rounding=ROUND_HALF_UP
-            )
+            return strategy.apply_discount(self.get_total())
         return self.get_total()
 
     def discount_amount(self):

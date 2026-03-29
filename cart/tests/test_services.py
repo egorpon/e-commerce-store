@@ -10,6 +10,9 @@ from ..models import Cart, CartItem
 from ..cart import CartService
 from decimal import Decimal
 
+from coupon.factory import CouponFactory
+from django.urls import reverse
+
 # Create your tests here.
 
 
@@ -74,22 +77,57 @@ class CartServiceTest(TestCase):
 
     def test_cart_iter_yield_correct_data(self):
         self.service.add(self.product, 2)
-        
+
         for item in self.service:
             self.assertEqual(item["product"], self.product)
-            self.assertEqual(item['quantity'], 2)
-            self.assertEqual(item['total'], round(Decimal(self.product.price * 2),2))
+            self.assertEqual(item["quantity"], 2)
+            self.assertEqual(item["total"], round(Decimal(self.product.price * 2), 2))
 
-
-    def test_get_total_calculates_amount(self):
+    def test_get_total_calculation(self):
         self.service.add(self.product, 2)
-        
-        self.assertEqual(self.service.get_total(), round(Decimal(self.product.price * 2),2))
 
-    def test_get_item_total_calculates_item_amount(self):
+        self.assertEqual(
+            self.service.get_total(), round(Decimal(self.product.price * 2), 2)
+        )
+
+    def test_get_item_total_calculation(self):
         product_1 = ProductFactory(title="Nike")
 
         self.service.add(self.product, 1)
         self.service.add(product_1, 5)
 
-        self.assertEqual(self.service.get_item_total(product_1.id), round(Decimal(product_1.price * 5),2))
+        self.assertEqual(
+            self.service.get_item_total(product_1.id),
+            round(Decimal(product_1.price * 5), 2),
+        )
+
+    def test_get_new_total_calculation(self):
+        coupon = CouponFactory(type="Fixed")
+
+        self.service.add(self.product, 1)
+        cart = Cart.objects.filter(user=self.user).first()
+
+        cart.coupon = coupon
+        cart.save()
+
+        self.service.cart.refresh_from_db()
+
+        self.assertEqual(
+            self.service.get_new_total(), round(Decimal(self.product.price - coupon.value),2)
+        )
+
+
+    def test_discount_amount_calculation(self):
+        coupon = CouponFactory(type="Fixed")
+
+        self.service.add(self.product, 1)
+        cart = Cart.objects.filter(user=self.user).first()
+
+        cart.coupon = coupon
+        cart.save()
+
+        self.service.cart.refresh_from_db()
+
+        self.assertEqual(
+            self.service.discount_amount(), Decimal("12.00"))
+        

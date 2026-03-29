@@ -14,7 +14,7 @@ def apply_discount(request):
         if title == "":
             return JsonResponse(
                 {
-                    "message": f"Please enter a correct promo code",
+                    "message": "Please enter a correct promo code",
                     "status": "danger",
                 }
             )
@@ -24,7 +24,7 @@ def apply_discount(request):
         if not coupon:
             return JsonResponse(
                 {
-                    "message": f"Promo code not found",
+                    "message": "Promo code not found",
                     "status": "danger",
                 }
             )
@@ -32,7 +32,7 @@ def apply_discount(request):
         if not coupon.is_valid():
             return JsonResponse(
                 {
-                    "message": f"This promo code has expired",
+                    "message": "This promo code has expired",
                     "status": "danger",
                 }
             )
@@ -42,7 +42,7 @@ def apply_discount(request):
         if cart.cart.coupon:
             return JsonResponse(
                 {
-                    "message": f"A promo code is already applied",
+                    "message": "A promo code is already applied",
                     "status": "danger",
                 }
             )
@@ -52,7 +52,7 @@ def apply_discount(request):
 
         return JsonResponse(
             {
-                "message": f"Promo code applied",
+                "message": "Promo code applied",
                 "status": "success",
                 "new_total": cart.get_new_total(),
                 "discount_amount": cart.discount_amount(),
