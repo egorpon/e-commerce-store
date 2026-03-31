@@ -2,6 +2,7 @@ import factory
 from store.models import Product, Category
 from .models import Cart, CartItem
 from django.contrib.auth.models import User
+from decimal import Decimal
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -28,7 +29,7 @@ class ProductFactory(factory.django.DjangoModelFactory):
     brand = "Vans"
     description = "Skate shoes"
     slug = factory.Sequence(lambda x: f"vans-old-school-{x}")
-    price = 68.99
+    price = Decimal("12.99")
     image = factory.django.ImageField(color="blue", width=100, height=100)
 
 

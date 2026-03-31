@@ -89,5 +89,5 @@ class CouponViewTest(TestCase):
 
         self.assertEqual(data["message"], "Promo code applied")
         self.assertEqual(data["status"], "success")
-        self.assertEqual(data["new_total"], "60.71")
-        self.assertEqual(data["discount_amount"], "8.28")
+        self.assertEqual(data["new_total"], "11.43")
+        self.assertEqual(data["discount_amount"], "1.56")

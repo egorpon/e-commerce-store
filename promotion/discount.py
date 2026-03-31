@@ -20,6 +20,6 @@ def get_discounted_price(product: Product) -> Decimal:
 
     if discount:
         final_price = product.price * (1 - Decimal(discount.value) / 100)
-        return final_price.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        return round(final_price,2)
 
-    return product.price
+    return Decimal(product.price)
