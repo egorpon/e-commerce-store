@@ -19,9 +19,6 @@ class CreateUserForm(UserCreationForm):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("This email has already been used")
 
-        if len(email) > 350:
-            raise forms.ValidationError("Your email is too long")
-
         return email
 
 
@@ -34,8 +31,8 @@ class UpdateUserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ["username", "email"]
-        exclude = ['password1', 'password2']
-    
+        exclude = ["password1", "password2"]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["username"].required = True
@@ -46,8 +43,5 @@ class UpdateUserForm(forms.ModelForm):
 
         if User.objects.filter(email=email).exclude(pk=self.instance.pk):
             raise forms.ValidationError("This email has already been used")
-
-        if len(email) > 350:
-            raise forms.ValidationError("Your email is too long")
 
         return email
