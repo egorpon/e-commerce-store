@@ -26,6 +26,7 @@ from django.contrib import messages
 
 from payment.models import Order, OrderItem
 
+
 def register(request):
     form = CreateUserForm()
     if request.method == "POST":
@@ -50,8 +51,6 @@ def register(request):
             user.email_user(subject=subject, message=message)
 
             return redirect("email_verification_sent")
-        else:
-            print(form.errors)
 
     context = {"form": form}
 
@@ -60,7 +59,7 @@ def register(request):
 
 def email_verification(request, uidb64, token):
     unique_id = force_str(urlsafe_base64_decode(uidb64))
-    user = User.objects.get(pk=unique_id)
+    user = User.objects.filter(pk=unique_id).first()
 
     if user and email_token_generator.check_token(user, token):
         user.is_active = True
@@ -147,8 +146,8 @@ def manage_shipping(request):
 
     return render(request, "account/manage-shipping.html", {"form": form})
 
-@login_required(login_url='login_user')
-def my_orders(request):
 
-    orders  = Order.objects.filter(user=request.user)
-    return render(request, 'account/my-orders.html', {"orders": orders})
+@login_required(login_url="login_user")
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request, "account/my-orders.html", {"orders": orders})
