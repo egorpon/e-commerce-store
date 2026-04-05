@@ -10,6 +10,7 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = User
 
     username = factory.Sequence(lambda x: f"user_{x}")
+    
 
 
 class CategoryFactory(factory.django.DjangoModelFactory):
