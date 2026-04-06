@@ -41,7 +41,7 @@ class CartViewTest(TestCase):
         cart_item = CartItem.objects.filter(
             cart=user_cart, product=self.product
         ).first()
-        self.assertEqual(cart_item.quantity, 2)
+        self.assertEqual(cart_item.quantity, 3)
 
     def test_cart_add_with_unauthorized_user(self):
         self.client.post(
@@ -66,7 +66,7 @@ class CartViewTest(TestCase):
         cart_item = CartItem.objects.filter(
             cart=user_cart, product=self.product
         ).first()
-        self.assertEqual(cart_item.quantity, 2)
+        self.assertEqual(cart_item.quantity, 3)
 
     def test_cart_update_with_authorized_user(self):
         self.client.force_login(self.user)

@@ -37,8 +37,9 @@ class CartService:
             cart=self.cart, product=product, defaults={"quantity": product_quantity}
         )
         if not created:
-            cart_item.quantity = product_quantity
-        cart_item.save()
+            cart_item.quantity += product_quantity
+            cart_item.save()
+        
 
     def delete(self, product_id):
         cart_item = CartItem.objects.filter(

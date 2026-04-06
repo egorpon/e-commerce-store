@@ -45,7 +45,7 @@ class CartServiceTest(TestCase):
         cart = Cart.objects.filter(user=self.user).first()
         item = CartItem.objects.filter(cart=cart, product=self.product).first()
 
-        self.assertEqual(item.quantity, 5)
+        self.assertEqual(item.quantity, 7)
 
     def test_delete_product(self):
         self.service.add(self.product, 2)

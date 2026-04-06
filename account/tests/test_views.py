@@ -10,6 +10,7 @@ from ..token import email_token_generator
 
 from cart.factory import UserFactory
 
+import re
 
 from payment.models import ShippingAddress
 # Create your tests here.
@@ -48,10 +49,11 @@ class AccountViewTest(TestCase):
 
         self.assertIn(expected_uid, email.body)
 
-        token = email_token_generator.make_token(user)
-
-        self.assertIn(token, email.body)
-        self.assertTrue(email_token_generator.check_token(user, token))
+        match = re.search(r'http://[^\s]+', email.body)
+        url = match.group(0)
+        response = self.client.get(url)
+        user.refresh_from_db()
+        self.assertTrue(user.is_active)
 
     def test_register_user_with_invalid_credentials_returns_form_errors(self):
         response = self.client.post(
