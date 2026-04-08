@@ -27,16 +27,14 @@ def checkout(request):
 def payment_success(request):
     if request.user.is_authenticated:
         user_cart = Cart.objects.filter(user=request.user).first()
-        if not user_cart:
-            return redirect("payment_failed")
+
         user_cart.delete()
 
     else:
         guest_cart = Cart.objects.filter(
             session_key=request.session.session_key
         ).first()
-        if not guest_cart:
-            return redirect("payment_failed")
+
         guest_cart.delete()
 
     return render(request, "payment/payment-success.html")

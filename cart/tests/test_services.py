@@ -81,13 +81,13 @@ class CartServiceTest(TestCase):
         for item in self.service:
             self.assertEqual(item["product"], self.product)
             self.assertEqual(item["quantity"], 2)
-            self.assertEqual(item["total"], round(Decimal(self.product.price * 2), 2))
+            self.assertEqual(item["total"], Decimal('25.98'))
 
     def test_get_total_calculation(self):
         self.service.add(self.product, 2)
 
         self.assertEqual(
-            self.service.get_total(), round(Decimal(self.product.price * 2), 2)
+            self.service.get_total(), Decimal('25.98')
         )
 
     def test_get_item_total_calculation(self):

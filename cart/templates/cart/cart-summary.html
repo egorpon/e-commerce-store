@@ -72,7 +72,9 @@
             <div id="new-total" class="d-none h3 fw-bold text-danger"></div>
           {% endif %}
         </div>
-        <a role="button" class="btn btn-outline-primary" href="{% url 'checkout' %}">Proceed to checkout</a>
+        {% if cart %}
+          <a role="button" class="btn btn-outline-primary" href="{% url 'checkout' %}">Proceed to checkout</a>
+        {% endif %}
       </div>
     </div>
   </section>
