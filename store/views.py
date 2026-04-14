@@ -9,8 +9,10 @@ from promotion.models import Discount
 
 
 def store(request):
-    all_products = Product.objects.all().prefetch_related(
-        "discounts", "category__category_discounts"
+    all_products = (
+        Product.objects.all()
+        .prefetch_related("discounts", "category__category_discounts")
+        .select_related("category")
     )
     context = {"all_products": all_products}
     return render(request, "store/store.html", context=context)
@@ -29,7 +31,7 @@ def list_category(request, category_slug=None):
 
 
 def product_info(request, product_slug):
-    product = get_object_or_404(Product, slug=product_slug)
+    product = Product.objects.prefetch_related('discounts','category__category_discounts').filter(slug=product_slug).first()
     context = {"product": product}
 
     return render(request, "store/product-info.html", context=context)

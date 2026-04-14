@@ -5,9 +5,6 @@ from cart.factory import UserFactory
 
 # Create your tests here.
 class AccountFormTest(TestCase):
-    def setUp(self):
-        return super().setUp()
-
     def test_create_user_form_email_must_be_unique(self):
         user1 = UserFactory(email="user1@gmail.com")
 

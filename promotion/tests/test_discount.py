@@ -3,10 +3,10 @@ from cart.factory import ProductFactory, CategoryFactory
 from ..factory import DiscountFactory
 from ..discount import get_discounted_price
 from decimal import Decimal
-
+from core.tests_base import BaseTestClass
 
 # Create your tests here.
-class PromotionDiscountTest(TestCase):
+class PromotionDiscountTest(BaseTestClass):
     def setUp(self):
         self.category = CategoryFactory()
         self.product = ProductFactory(category=self.category)

@@ -12,11 +12,11 @@ from decimal import Decimal
 
 from coupon.factory import CouponFactory
 from django.urls import reverse
-
+from core.tests_base import BaseTestClass
 # Create your tests here.
 
 
-class CartServiceTest(TestCase):
+class CartServiceTest(BaseTestClass):
     def setUp(self):
         self.user = UserFactory()
         self.category = CategoryFactory(name="shoes", slug="shoes")

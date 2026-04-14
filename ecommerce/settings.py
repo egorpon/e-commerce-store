@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import tempfile
+import sys
 
 load_dotenv()
 
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
     "promotion",
     "crispy_forms",
     "mathfilters",
+    "silk",
 ]
 
 CRISPY_TEMPLATE_PACK = "Bootstrap4"
@@ -58,6 +61,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "silk.middleware.SilkyMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -138,6 +142,13 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "media/"
 
 MEDIA_ROOT = BASE_DIR / "static/media"
+
+
+if "test" in sys.argv:
+    MEDIA_ROOT = tempfile.mkdtemp()
+    PASSWORD_HASHERS = [
+        "django.contrib.auth.hashers.MD5PasswordHasher",
+    ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

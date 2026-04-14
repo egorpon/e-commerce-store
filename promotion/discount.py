@@ -7,16 +7,16 @@ from django.db.models import Q
 def get_discounted_price(product: Product) -> Decimal:
     now = timezone.now()
 
-    discount = (
-        Discount.objects.filter(
-            is_active=True,
-            valid_from__lte=now,
-            valid_to__gte=now,
-        )
-        .filter(Q(products=product) | Q(categories=product.category))
-        .order_by("-value")
-        .first()
-    )
+    discounts = [] 
+
+    if product:
+        discounts += [d for d in product.discounts.all() if d.valid_from <= now <= d.valid_to and d.is_active]
+
+    if product.category:
+        discounts += [d for d in product.category.category_discounts.all() if d.valid_from <= now <= d.valid_to and d.is_active]
+
+    discount = max(discounts, key=lambda d: d.value, default=None)
+        
 
     if discount:
         final_price = product.price * (1 - Decimal(discount.value) / 100)

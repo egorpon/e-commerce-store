@@ -20,9 +20,11 @@ from decimal import Decimal
 
 from django.core import mail
 
+from core.tests_base import BaseTestClass
+
 
 # Create your tests here.
-class PaymentViewTest(TestCase):
+class PaymentViewTest(BaseTestClass):
     def setUp(self):
         self.user = UserFactory()
         self.shipping_address = ShippingAddressFactory(

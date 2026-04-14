@@ -1,9 +1,12 @@
 asgiref==3.10.0
-Django==5.2.7
+Django==6.0.4
 django-crispy-forms==1.14.0
 django-mathfilters==1.0.0
-django-storages==1.13.1
+factory_boy==3.3.3
+Faker==40.5.1
+git-filter-repo==2.47.0
 pillow==12.0.0
 python-dotenv==1.2.1
+six==1.17.0
 sqlparse==0.5.3
 tzdata==2025.2
