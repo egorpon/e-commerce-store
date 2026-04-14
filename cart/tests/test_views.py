@@ -8,11 +8,10 @@ from ..factory import (
 )
 from ..models import Cart, CartItem
 from django.urls import reverse
+from core.tests_base import BaseTestClass
 
-# Create your tests here.
 
-
-class CartViewTest(TestCase):
+class CartViewTest(BaseTestClass):
     def setUp(self):
         self.user = UserFactory()
         self.category = CategoryFactory(name="shoes", slug="shoes")

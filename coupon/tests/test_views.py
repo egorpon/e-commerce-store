@@ -9,10 +9,11 @@ from cart.factory import UserFactory, CartFactory, CartItemFactory, ProductFacto
 from cart.models import Cart
 
 from decimal import Decimal
+from core.tests_base import BaseTestClass
 
 
 # Create your tests here.
-class CouponViewTest(TestCase):
+class CouponViewTest(BaseTestClass):
     def setUp(self):
         self.coupon = CouponFactory(title="SAVE12")
 

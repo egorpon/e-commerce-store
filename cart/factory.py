@@ -25,7 +25,7 @@ class ProductFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Product
 
-    title = "vans old school"
+    title = factory.Sequence(lambda x: f"vans old school #{x}")
     category = factory.SubFactory(CategoryFactory)
     brand = "Vans"
     description = "Skate shoes"

@@ -18,11 +18,23 @@ class CartService:
 
     def _get_existing_cart(self):
         if self.user.is_authenticated:
-            return Cart.objects.filter(user=self.user).first()
+            return (
+                Cart.objects.prefetch_related(
+                    "items__product__discounts",
+                    "items__product__category__category_discounts",
+                )
+                .filter(user=self.user)
+                .first()
+            )
         else:
-            return Cart.objects.filter(
-                session_key=self.session.session_key, user=None
-            ).first()
+            return (
+                Cart.objects.prefetch_related(
+                    "items__product__discounts",
+                    "items__product__category__category_discounts",
+                )
+                .filter(session_key=self.session.session_key, user=None)
+                .first()
+            )
 
     def _create_cart(self):
         if self.user.is_authenticated:
@@ -39,7 +51,6 @@ class CartService:
         if not created:
             cart_item.quantity += product_quantity
             cart_item.save()
-        
 
     def delete(self, product_id):
         cart_item = CartItem.objects.filter(
@@ -54,7 +65,7 @@ class CartService:
 
         if cart_item:
             cart_item.quantity = product_quantity
-        cart_item.save()
+            cart_item.save()
 
     def __len__(self):
         if not self.cart:

@@ -55,7 +55,7 @@ def cart_delete(request):
 
         if cart_quantity == 0:
             cart_service.cart.delete()
-
+        
         response = JsonResponse(
             {
                 "quantity": cart_quantity,
