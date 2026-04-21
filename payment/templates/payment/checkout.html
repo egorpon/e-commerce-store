@@ -17,6 +17,7 @@
         </div>
 
         <div class="my-3" id="paypal-button-container"></div>
+        <button id="free-order-btn" style="display:none" class="btn btn-primary place-free-order w-100">Place Order For Free</button>
         <br />
         <script src="https://www.paypal.com/sdk/js?client-id=AedH3LKGyDNT8my0JWFjHYeA6g6-mCvWWjgDqR4LmSTofqxnonX7Y5G1DSyByUKmTKFJyAGYhwBkugwx&currency=USD"></script>
       </form>
@@ -26,8 +27,11 @@
 
   <script>
     // Render the PayPal button into #paypal-button-container
-    var total_price = '{{ cart.get_new_total }}'
-    
+    var total_price = parseFloat('{{ cart.get_new_total }}')
+    if (total_price === 0) {
+      document.getElementById('paypal-button-container').style.display = 'none'
+      document.getElementById('free-order-btn').style.display = 'block'
+    }
     paypal
       .Buttons({
         style: {
@@ -106,5 +110,36 @@
         }
       })
       .render('#paypal-button-container')
+    $(document).on('click', '.place-free-order', function (e) {
+      const form = document.querySelector('#form')
+    
+      if (!form.reportValidity()) {
+        return
+      }
+      e.preventDefault()
+      $.ajax({
+        type: 'POST',
+        url: '{% url "complete_order" %}',
+        data: {
+          name: $('#name').val(),
+          email: $('#email').val(),
+          address1: $('#address1').val(),
+          address2: $('#address2').val(),
+          city: $('#city').val(),
+          state: $('#state').val(),
+          zipcode: $('#zipcode').val(),
+          csrfmiddlewaretoken: '{{csrf_token}}',
+          action: 'post'
+        },
+    
+        success: function (json) {
+          window.location.replace("{% url 'payment_success' %}")
+        },
+    
+        error: function (xhr, errmsg, err) {
+          window.location.replace("{% url 'payment_failed' %}")
+        }
+      })
+    })
   </script>
 {% endblock %}

@@ -61,6 +61,8 @@ def complete_order(request):
         cart = CartService(request)
 
         total_cost = cart.get_new_total()
+
+
         product_list = []
 
         order = Order.objects.create(

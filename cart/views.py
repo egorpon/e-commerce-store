@@ -9,11 +9,11 @@ from django.http import JsonResponse
 # Create your views here.
 from cart.models import CartItem, Cart
 
+from django.views.decorators.cache import never_cache
 
+@never_cache
 def cart_summary(request):
-    cart = CartService(request)
-
-    return render(request, "cart/cart-summary.html", {"cart": cart})
+    return render(request, "cart/cart-summary.html")
 
 
 def cart_add(request):

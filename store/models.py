@@ -17,7 +17,6 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse("list_category", args=[self.slug])
 
-
 class Product(models.Model):
     title = models.CharField(max_length=255)
     category = models.ForeignKey(
@@ -25,7 +24,7 @@ class Product(models.Model):
     )
     brand = models.CharField(max_length=255, default="un-branded")
     description = models.TextField(blank=True)
-    slug = models.SlugField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True, db_index=True)
     price = models.DecimalField(max_digits=4, decimal_places=2)
     image = models.ImageField(upload_to="images/")
 
@@ -38,6 +37,7 @@ class Product(models.Model):
     @property
     def sell_price(self) -> Decimal:
         from promotion.discount import get_discounted_price
+
         return get_discounted_price(self)
 
     @property

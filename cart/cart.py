@@ -4,6 +4,8 @@ from .models import Cart, CartItem
 
 from coupon.discount import DiscountStrategy, get_discount_strategy
 
+from django.db.models import Sum
+
 
 class CartService:
     def __init__(self, request):
@@ -17,30 +19,24 @@ class CartService:
         self.cart = self._get_existing_cart()
 
     def _get_existing_cart(self):
+        cart = Cart.objects.prefetch_related(
+            "items__product__discounts",
+            "items__product__category__category_discounts",
+        )
         if self.user.is_authenticated:
-            return (
-                Cart.objects.prefetch_related(
-                    "items__product__discounts",
-                    "items__product__category__category_discounts",
-                )
-                .filter(user=self.user)
-                .first()
-            )
+            return cart.filter(user=self.user).first()
         else:
-            return (
-                Cart.objects.prefetch_related(
-                    "items__product__discounts",
-                    "items__product__category__category_discounts",
-                )
-                .filter(session_key=self.session.session_key, user=None)
-                .first()
-            )
+            return cart.filter(session_key=self.session.session_key, user=None).first()
 
     def _create_cart(self):
         if self.user.is_authenticated:
             return Cart.objects.create(user=self.user)
         else:
             return Cart.objects.create(session_key=self.session.session_key, user=None)
+        
+    def _clear_cache(self):
+        if hasattr(self.cart, '_prefetched_objects_cache'):
+            del self.cart._prefetched_objects_cache
 
     def add(self, product, product_quantity):
         if not self.cart:
@@ -51,6 +47,8 @@ class CartService:
         if not created:
             cart_item.quantity += product_quantity
             cart_item.save()
+        self._clear_cache()
+        
 
     def delete(self, product_id):
         cart_item = CartItem.objects.filter(
@@ -66,6 +64,7 @@ class CartService:
         if cart_item:
             cart_item.quantity = product_quantity
             cart_item.save()
+        self._clear_cache()
 
     def __len__(self):
         if not self.cart:

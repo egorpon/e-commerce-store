@@ -149,5 +149,5 @@ def manage_shipping(request):
 
 @login_required(login_url="login_user")
 def my_orders(request):
-    orders = Order.objects.filter(user=request.user)
+    orders = Order.objects.filter(user=request.user).prefetch_related('items')
     return render(request, "account/my-orders.html", {"orders": orders})
