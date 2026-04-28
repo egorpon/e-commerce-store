@@ -1,8 +1,8 @@
-from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Coupon
-from cart.models import Cart
+
 from cart.cart import CartService
+
+from .models import Coupon
 
 # Create your views here.
 

@@ -1,18 +1,18 @@
-from django.test import TestCase, RequestFactory
-from ..factory import (
-    UserFactory,
-    CategoryFactory,
-    ProductFactory,
-    CartFactory,
-    CartItemFactory,
-)
-from ..models import Cart, CartItem
-from ..cart import CartService
 from decimal import Decimal
 
-from coupon.factory import CouponFactory
-from django.urls import reverse
+from django.test import RequestFactory
+
 from core.tests_base import BaseTestClass
+from coupon.factory import CouponFactory
+
+from ..cart import CartService
+from ..factory import (
+    CategoryFactory,
+    ProductFactory,
+    UserFactory,
+)
+from ..models import Cart, CartItem
+
 # Create your tests here.
 
 
@@ -81,14 +81,12 @@ class CartServiceTest(BaseTestClass):
         for item in self.service:
             self.assertEqual(item["product"], self.product)
             self.assertEqual(item["quantity"], 2)
-            self.assertEqual(item["total"], Decimal('25.98'))
+            self.assertEqual(item["total"], Decimal("25.98"))
 
     def test_get_total_calculation(self):
         self.service.add(self.product, 2)
 
-        self.assertEqual(
-            self.service.get_total(), Decimal('25.98')
-        )
+        self.assertEqual(self.service.get_total(), Decimal("25.98"))
 
     def test_get_item_total_calculation(self):
         product_1 = ProductFactory(title="Nike")
@@ -113,9 +111,9 @@ class CartServiceTest(BaseTestClass):
         self.service.cart.refresh_from_db()
 
         self.assertEqual(
-            self.service.get_new_total(), round(Decimal(self.product.price - coupon.value),2)
+            self.service.get_new_total(),
+            round(Decimal(self.product.price - coupon.value), 2),
         )
-
 
     def test_discount_amount_calculation(self):
         coupon = CouponFactory(type="Fixed")
@@ -128,6 +126,4 @@ class CartServiceTest(BaseTestClass):
 
         self.service.cart.refresh_from_db()
 
-        self.assertEqual(
-            self.service.discount_amount(), Decimal("12.00"))
-        
+        self.assertEqual(self.service.discount_amount(), Decimal("12.00"))

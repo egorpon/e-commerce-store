@@ -1,12 +1,14 @@
+from decimal import Decimal
+
 from django.test import TestCase
-from ..factory import CouponFactory
+
 from ..discount import (
-    get_discount_strategy,
-    PercentageDiscount,
     FixedDiscount,
     NoDiscount,
+    PercentageDiscount,
+    get_discount_strategy,
 )
-from decimal import Decimal
+from ..factory import CouponFactory
 
 
 # Create your tests here.

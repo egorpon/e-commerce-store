@@ -1,7 +1,9 @@
-import factory
-from .models import Coupon
-from django.utils import timezone
 from datetime import timedelta
+
+import factory
+from django.utils import timezone
+
+from .models import Coupon
 
 
 class CouponFactory(factory.django.DjangoModelFactory):

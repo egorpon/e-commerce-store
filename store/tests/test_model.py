@@ -1,12 +1,10 @@
-from django.test import TestCase
-
-from cart.factory import ProductFactory, CategoryFactory
-
-from promotion.factory import DiscountFactory
-
 from decimal import Decimal
 
+
+from cart.factory import ProductFactory
 from core.tests_base import BaseTestClass
+from promotion.factory import DiscountFactory
+
 
 # Create your tests here.
 class StoreModelTest(BaseTestClass):

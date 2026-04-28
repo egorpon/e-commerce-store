@@ -7,34 +7,49 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(db_index=True, max_length=255)),
-                ('slug', models.SlugField(max_length=255, unique=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(db_index=True, max_length=255)),
+                ("slug", models.SlugField(max_length=255, unique=True)),
             ],
             options={
-                'verbose_name_plural': 'categories',
+                "verbose_name_plural": "categories",
             },
         ),
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('brand', models.CharField(default='un-branded', max_length=255)),
-                ('description', models.TextField(blank=True)),
-                ('slug', models.SlugField(max_length=255, unique=True)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=4)),
-                ('image', models.ImageField(upload_to='images/')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("brand", models.CharField(default="un-branded", max_length=255)),
+                ("description", models.TextField(blank=True)),
+                ("slug", models.SlugField(max_length=255, unique=True)),
+                ("price", models.DecimalField(decimal_places=2, max_digits=4)),
+                ("image", models.ImageField(upload_to="images/")),
             ],
             options={
-                'verbose_name_plural': 'products',
+                "verbose_name_plural": "products",
             },
         ),
     ]

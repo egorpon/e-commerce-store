@@ -6,14 +6,14 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('payment', '0003_alter_shippingaddress_zipcode'),
+        ("payment", "0003_alter_shippingaddress_zipcode"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='shippingaddress',
-            name='city',
-            field=models.CharField(default='', max_length=255),
+            model_name="shippingaddress",
+            name="city",
+            field=models.CharField(default="", max_length=255),
             preserve_default=False,
         ),
     ]

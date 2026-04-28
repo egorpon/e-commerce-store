@@ -1,14 +1,15 @@
-from django.test import TestCase
+from django.urls import reverse
+
+from core.tests_base import BaseTestClass
+
 from ..factory import (
-    UserFactory,
-    CategoryFactory,
-    ProductFactory,
     CartFactory,
     CartItemFactory,
+    CategoryFactory,
+    ProductFactory,
+    UserFactory,
 )
 from ..models import Cart, CartItem
-from django.urls import reverse
-from core.tests_base import BaseTestClass
 
 
 class CartViewTest(BaseTestClass):
@@ -111,5 +112,7 @@ class CartViewTest(BaseTestClass):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(cart.items.count(), 1)
-        self.assertNotIn(self.product.id, cart.items.all().values_list('product', flat=True))
+        self.assertNotIn(
+            self.product.id, cart.items.all().values_list("product", flat=True)
+        )
         self.assertTrue(cart.items.filter(product=product2).exists())

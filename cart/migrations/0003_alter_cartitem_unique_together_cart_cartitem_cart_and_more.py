@@ -8,45 +8,71 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('cart', '0002_cartitem_session_key_alter_cartitem_user'),
+        ("cart", "0002_cartitem_session_key_alter_cartitem_user"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='cartitem',
+            name="cartitem",
             unique_together=set(),
         ),
         migrations.CreateModel(
-            name='Cart',
+            name="Cart",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('session_key', models.CharField(blank=True, db_index=True, max_length=40, null=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "session_key",
+                    models.CharField(
+                        blank=True, db_index=True, max_length=40, null=True
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='cartitem',
-            name='cart',
-            field=models.ForeignKey(default='', on_delete=django.db.models.deletion.CASCADE, related_name='items', to='cart.cart'),
+            model_name="cartitem",
+            name="cart",
+            field=models.ForeignKey(
+                default="",
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="items",
+                to="cart.cart",
+            ),
             preserve_default=False,
         ),
         migrations.RemoveField(
-            model_name='cartitem',
-            name='created_at',
+            model_name="cartitem",
+            name="created_at",
         ),
         migrations.RemoveField(
-            model_name='cartitem',
-            name='session_key',
+            model_name="cartitem",
+            name="session_key",
         ),
         migrations.RemoveField(
-            model_name='cartitem',
-            name='updated_at',
+            model_name="cartitem",
+            name="updated_at",
         ),
         migrations.RemoveField(
-            model_name='cartitem',
-            name='user',
+            model_name="cartitem",
+            name="user",
         ),
     ]

@@ -1,15 +1,13 @@
-from django.shortcuts import render
-
-from .cart import CartService
-from store.models import Product
-from django.shortcuts import get_object_or_404
-
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, render
+from django.views.decorators.cache import never_cache
 
 # Create your views here.
-from cart.models import CartItem, Cart
+from cart.models import CartItem
+from store.models import Product
 
-from django.views.decorators.cache import never_cache
+from .cart import CartService
+
 
 @never_cache
 def cart_summary(request):
@@ -55,7 +53,7 @@ def cart_delete(request):
 
         if cart_quantity == 0:
             cart_service.cart.delete()
-        
+
         response = JsonResponse(
             {
                 "quantity": cart_quantity,
@@ -79,7 +77,6 @@ def cart_update(request):
         cart_total = cart_service.get_total()
 
         item_total = cart_service.get_item_total(product_id)
-        
 
         if cart.coupon:
             return JsonResponse(
@@ -89,7 +86,6 @@ def cart_update(request):
                     "item_total": item_total,
                     "discount_amount": cart_service.discount_amount(),
                     "new_total": cart_service.get_new_total(),
-                    
                 }
             )
 

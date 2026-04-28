@@ -1,10 +1,9 @@
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import ROUND_HALF_UP, Decimal
+
+
+from coupon.discount import get_discount_strategy
 
 from .models import Cart, CartItem
-
-from coupon.discount import DiscountStrategy, get_discount_strategy
-
-from django.db.models import Sum
 
 
 class CartService:
@@ -33,9 +32,9 @@ class CartService:
             return Cart.objects.create(user=self.user)
         else:
             return Cart.objects.create(session_key=self.session.session_key, user=None)
-        
+
     def _clear_cache(self):
-        if hasattr(self.cart, '_prefetched_objects_cache'):
+        if hasattr(self.cart, "_prefetched_objects_cache"):
             del self.cart._prefetched_objects_cache
 
     def add(self, product, product_quantity):
@@ -48,7 +47,6 @@ class CartService:
             cart_item.quantity += product_quantity
             cart_item.save()
         self._clear_cache()
-        
 
     def delete(self, product_id):
         cart_item = CartItem.objects.filter(

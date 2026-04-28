@@ -1,30 +1,20 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponse
-
-from .forms import CreateUserForm, LoginUserForm, UpdateUserForm
-
-from payment.forms import ShippingForm
-
-from payment.models import ShippingAddress
-
-from django.contrib.sites.shortcuts import get_current_site
-
-from .token import email_token_generator
-
+from django.contrib import messages
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-# Create your views here.
-
+from django.contrib.sites.shortcuts import get_current_site
+from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
+from payment.forms import ShippingForm
+from payment.models import Order, ShippingAddress
 
-from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
+from .forms import CreateUserForm, LoginUserForm, UpdateUserForm
+from .token import email_token_generator
 
-from django.contrib import messages
-
-from payment.models import Order, OrderItem
+# Create your views here.
 
 
 def register(request):
@@ -149,5 +139,5 @@ def manage_shipping(request):
 
 @login_required(login_url="login_user")
 def my_orders(request):
-    orders = Order.objects.filter(user=request.user).prefetch_related('items')
+    orders = Order.objects.filter(user=request.user).prefetch_related("items")
     return render(request, "account/my-orders.html", {"orders": orders})

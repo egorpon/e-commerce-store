@@ -1,9 +1,12 @@
-from django.test import TestCase
-from cart.factory import ProductFactory, CategoryFactory
-from ..factory import DiscountFactory
-from ..discount import get_discounted_price
 from decimal import Decimal
+
+
+from cart.factory import CategoryFactory, ProductFactory
 from core.tests_base import BaseTestClass
+
+from ..discount import get_discounted_price
+from ..factory import DiscountFactory
+
 
 # Create your tests here.
 class PromotionDiscountTest(BaseTestClass):

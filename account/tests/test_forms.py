@@ -1,6 +1,8 @@
 from django.test import TestCase
-from ..forms import CreateUserForm, UpdateUserForm
+
 from cart.factory import UserFactory
+
+from ..forms import CreateUserForm, UpdateUserForm
 
 
 # Create your tests here.
@@ -20,7 +22,6 @@ class AccountFormTest(TestCase):
         self.assertEqual(form.errors["email"], ["This email has already been used"])
 
     def test_update_user_cannot_use_foreign_email(self):
-        user1 = UserFactory(username="user1", email="user1@gmal.com")
         user2 = UserFactory(username="user2", email="user2@gmal.com")
 
         data = {"username": "user2_thief", "email": "user1@gmal.com"}

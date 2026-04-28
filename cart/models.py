@@ -1,8 +1,10 @@
-from django.db import models
-from django.contrib.auth.models import User
-from store.models import Product
-from coupon.models import Coupon
 from decimal import Decimal
+
+from django.contrib.auth.models import User
+from django.db import models
+
+from coupon.models import Coupon
+from store.models import Product
 
 # Create your models here.
 
@@ -31,7 +33,9 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_items')
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="product_items"
+    )
     quantity = models.PositiveIntegerField(default=1)
 
     @property

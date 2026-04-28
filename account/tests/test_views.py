@@ -1,18 +1,17 @@
-from django.test import TestCase
-from django.core import mail
-from django.urls import reverse
-from django.contrib.auth.models import User
+import re
 
-from django.utils.encoding import force_bytes, force_str
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from django.contrib.auth.models import User
+from django.core import mail
+from django.test import TestCase
+from django.urls import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+
+from cart.factory import UserFactory
+from payment.models import ShippingAddress
 
 from ..token import email_token_generator
 
-from cart.factory import UserFactory
-
-import re
-
-from payment.models import ShippingAddress
 # Create your tests here.
 
 
@@ -49,7 +48,7 @@ class AccountViewTest(TestCase):
 
         self.assertIn(expected_uid, email.body)
 
-        match = re.search(r'http://[^\s]+', email.body)
+        match = re.search(r"http://[^\s]+", email.body)
         url = match.group(0)
         response = self.client.get(url)
         user.refresh_from_db()
@@ -187,24 +186,6 @@ class AccountViewTest(TestCase):
         self.assertRedirects(response, reverse("store"))
         user = User.objects.filter(pk=self.user.pk).first()
         self.assertIsNone(user)
-
-    def test_manage_shipping_create_new(self):
-        self.client.force_login(self.user)
-
-        data = {
-            "full_name": "tester testerovich",
-            "email": "test@gmail.com",
-            "city": "Praga",
-            "address1": "Praga, St. Praga",
-        }
-
-        response = self.client.post(reverse("manage_shipping"), data=data)
-
-        self.assertRedirects(response, reverse("manage_shipping"))
-
-        shipping = ShippingAddress.objects.get(user=self.user)
-
-        self.assertEqual(shipping.city, "Praga")
 
     def test_manage_shipping_create_new(self):
         self.client.force_login(self.user)

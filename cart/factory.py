@@ -1,8 +1,11 @@
-import factory
-from store.models import Product, Category
-from .models import Cart, CartItem
-from django.contrib.auth.models import User
 from decimal import Decimal
+
+import factory
+from django.contrib.auth.models import User
+
+from store.models import Category, Product
+
+from .models import Cart, CartItem
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -10,7 +13,6 @@ class UserFactory(factory.django.DjangoModelFactory):
         model = User
 
     username = factory.Sequence(lambda x: f"user_{x}")
-    
 
 
 class CategoryFactory(factory.django.DjangoModelFactory):

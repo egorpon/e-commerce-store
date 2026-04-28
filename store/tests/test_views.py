@@ -1,10 +1,9 @@
-from django.test import TestCase
-
-from cart.factory import ProductFactory, CategoryFactory
-
 from django.urls import reverse
 
+from cart.factory import CategoryFactory, ProductFactory
 from core.tests_base import BaseTestClass
+
+
 # Create your tests here.
 class StoreViewTest(BaseTestClass):
     def setUp(self):

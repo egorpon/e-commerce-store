@@ -7,20 +7,33 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Coupon',
+            name="Coupon",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=100)),
-                ('type', models.CharField(choices=[('Percent', 'Percent'), ('Fixed', 'Fixed')], max_length=10)),
-                ('value', models.IntegerField()),
-                ('is_active', models.BooleanField(default=True)),
-                ('valid_from', models.DateField()),
-                ('valid_to', models.DateField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=100)),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[("Percent", "Percent"), ("Fixed", "Fixed")],
+                        max_length=10,
+                    ),
+                ),
+                ("value", models.IntegerField()),
+                ("is_active", models.BooleanField(default=True)),
+                ("valid_from", models.DateField()),
+                ("valid_to", models.DateField()),
             ],
         ),
     ]

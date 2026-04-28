@@ -8,21 +8,39 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('store', '0002_product_category'),
+        ("store", "0002_product_category"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Discount',
+            name="Discount",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('value', models.IntegerField()),
-                ('is_active', models.BooleanField(default=True)),
-                ('valid_from', models.DateTimeField()),
-                ('valid_to', models.DateTimeField()),
-                ('categories', models.ManyToManyField(blank=True, related_name='discounts', to='store.category')),
-                ('products', models.ManyToManyField(blank=True, related_name='discounts', to='store.product')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("value", models.IntegerField()),
+                ("is_active", models.BooleanField(default=True)),
+                ("valid_from", models.DateTimeField()),
+                ("valid_to", models.DateTimeField()),
+                (
+                    "categories",
+                    models.ManyToManyField(
+                        blank=True, related_name="discounts", to="store.category"
+                    ),
+                ),
+                (
+                    "products",
+                    models.ManyToManyField(
+                        blank=True, related_name="discounts", to="store.product"
+                    ),
+                ),
             ],
         ),
     ]

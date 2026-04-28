@@ -1,15 +1,18 @@
-from django.test import TestCase
-from ..factory import CouponFactory
-from django.utils import timezone
 from datetime import timedelta
+
 from django.urls import reverse
+from django.utils import timezone
 
-from cart.factory import UserFactory, CartFactory, CartItemFactory, ProductFactory, CategoryFactory
-
+from cart.factory import (
+    CartFactory,
+    CartItemFactory,
+    CategoryFactory,
+    ProductFactory,
+)
 from cart.models import Cart
-
-from decimal import Decimal
 from core.tests_base import BaseTestClass
+
+from ..factory import CouponFactory
 
 
 # Create your tests here.
@@ -67,9 +70,7 @@ class CouponViewTest(BaseTestClass):
         self.assertEqual(data["status"], "danger")
 
     def test_apply_already_applied_promo_code_returns_error(self):
-        self.client.post(
-            reverse("apply_coupon"), {"code": "SAVE12", "action": "post"}
-        )
+        self.client.post(reverse("apply_coupon"), {"code": "SAVE12", "action": "post"})
         response = self.client.post(
             reverse("apply_coupon"), {"code": "SAVE12", "action": "post"}
         )
@@ -87,7 +88,7 @@ class CouponViewTest(BaseTestClass):
         )
 
         cart = Cart.objects.filter(session_key=self.client.session.session_key).first()
-        
+
         self.assertEqual(cart.coupon, self.coupon)
 
         self.assertEqual(response.status_code, 200)

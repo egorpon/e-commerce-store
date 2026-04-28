@@ -7,19 +7,26 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('promotion', '0001_initial'),
-        ('store', '0002_product_category'),
+        ("promotion", "0001_initial"),
+        ("store", "0002_product_category"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='discount',
-            name='categories',
-            field=models.ManyToManyField(blank=True, related_name='category_discounts', to='store.category'),
+            model_name="discount",
+            name="categories",
+            field=models.ManyToManyField(
+                blank=True, related_name="category_discounts", to="store.category"
+            ),
         ),
         migrations.AlterField(
-            model_name='discount',
-            name='value',
-            field=models.IntegerField(validators=[django.core.validators.MinValueValidator(0), django.core.validators.MaxValueValidator(100)]),
+            model_name="discount",
+            name="value",
+            field=models.IntegerField(
+                validators=[
+                    django.core.validators.MinValueValidator(0),
+                    django.core.validators.MaxValueValidator(100),
+                ]
+            ),
         ),
     ]

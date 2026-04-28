@@ -15,19 +15,38 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='ShippingAddress',
+            name="ShippingAddress",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('full_name', models.CharField(max_length=255)),
-                ('email', models.EmailField(max_length=255)),
-                ('address1', models.CharField(max_length=255)),
-                ('address2', models.CharField(blank=True, max_length=255, null=True)),
-                ('state', models.CharField(blank=True, max_length=255, null=True)),
-                ('zipcode', models.SmallIntegerField(blank=True, max_length=5, null=True)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("full_name", models.CharField(max_length=255)),
+                ("email", models.EmailField(max_length=255)),
+                ("address1", models.CharField(max_length=255)),
+                ("address2", models.CharField(blank=True, max_length=255, null=True)),
+                ("state", models.CharField(blank=True, max_length=255, null=True)),
+                (
+                    "zipcode",
+                    models.SmallIntegerField(blank=True, max_length=5, null=True),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Shipping Address',
+                "verbose_name_plural": "Shipping Address",
             },
         ),
     ]

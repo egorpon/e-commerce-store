@@ -1,6 +1,8 @@
+from decimal import Decimal
+
 from django.db import models
 from django.urls import reverse
-from decimal import Decimal
+
 # Create your models here.
 
 
@@ -16,6 +18,7 @@ class Category(models.Model):
 
     def get_absolute_url(self):
         return reverse("list_category", args=[self.slug])
+
 
 class Product(models.Model):
     title = models.CharField(max_length=255)

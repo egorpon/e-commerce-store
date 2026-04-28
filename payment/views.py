@@ -1,14 +1,15 @@
-from django.shortcuts import render, redirect
-from .forms import ShippingForm
-from .models import ShippingAddress, Order, OrderItem
-from cart.cart import CartService
-from cart.models import Cart, CartItem
-from django.http import JsonResponse
-
-from django.core.mail import send_mail
-from django.conf import settings
-
 from decimal import Decimal
+
+from django.conf import settings
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.shortcuts import render
+
+from cart.cart import CartService
+from cart.models import Cart
+
+from .forms import ShippingForm
+from .models import Order, OrderItem, ShippingAddress
 
 # Create your views here.
 
@@ -61,7 +62,6 @@ def complete_order(request):
         cart = CartService(request)
 
         total_cost = cart.get_new_total()
-
 
         product_list = []
 

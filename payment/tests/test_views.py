@@ -1,26 +1,20 @@
-from django.test import TestCase
+from decimal import Decimal
 
-from ..forms import ShippingForm
-from ..models import ShippingAddress, Order, OrderItem
-
+from django.core import mail
 from django.urls import reverse
-from ..factory import ShippingAddressFactory
 
 from cart.factory import (
-    UserFactory,
     CartFactory,
     CartItemFactory,
     CategoryFactory,
     ProductFactory,
+    UserFactory,
 )
-
 from cart.models import Cart
-
-from decimal import Decimal
-
-from django.core import mail
-
 from core.tests_base import BaseTestClass
+
+from ..factory import ShippingAddressFactory
+from ..models import Order, OrderItem
 
 
 # Create your tests here.
@@ -103,12 +97,11 @@ class PaymentViewTest(BaseTestClass):
 
         self.assertEqual(response.status_code, 200)
 
-
         order = Order.objects.filter(full_name="Benjamin", user=self.user).first()
         self.assertIsNotNone(order)
         self.assertEqual(order.amount_paid, Decimal("12.99"))
 
-        expected_address = 'Main St 1\nTel Aviv\n12345'
+        expected_address = "Main St 1\nTel Aviv\n12345"
         self.assertEqual(order.shipping_address, expected_address)
 
         order_item = OrderItem.objects.filter(order=order).first()
@@ -141,12 +134,11 @@ class PaymentViewTest(BaseTestClass):
 
         self.assertEqual(response.status_code, 200)
 
-
         order = Order.objects.filter(full_name="Benjamin", user=None).first()
         self.assertIsNotNone(order)
         self.assertEqual(order.amount_paid, Decimal("12.99"))
 
-        expected_address = 'Main St 1\nTel Aviv\n12345'
+        expected_address = "Main St 1\nTel Aviv\n12345"
         self.assertEqual(order.shipping_address, expected_address)
 
         order_item = OrderItem.objects.filter(order=order).first()
@@ -160,5 +152,3 @@ class PaymentViewTest(BaseTestClass):
 
         self.assertIn("Order", email.subject)
         self.assertIn("Total paid", email.body)
-
-
