@@ -31,7 +31,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ["127.0.0.1", "3.237.18.67"]
 
 
 # Application definition
@@ -49,10 +49,12 @@ INSTALLED_APPS = [
     "coupon",
     "promotion",
     "crispy_forms",
+    "crispy_bootstrap4",
     "mathfilters",
 ]
 
-CRISPY_TEMPLATE_PACK = "Bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_ALLOWED_TEMPLATE_PACK = "bootstrap4"
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -136,7 +138,7 @@ STATIC_URL = "static/"
 
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-STATIC_ROOT = BASE_DIR / 'static_root'
+STATIC_ROOT = BASE_DIR / "static_root"
 
 MEDIA_URL = "media/"
 
