@@ -1,6 +1,5 @@
 from decimal import ROUND_HALF_UP, Decimal
 
-
 from coupon.discount import get_discount_strategy
 
 from .models import Cart, CartItem

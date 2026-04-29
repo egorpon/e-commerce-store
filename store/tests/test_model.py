@@ -1,6 +1,5 @@
 from decimal import Decimal
 
-
 from cart.factory import ProductFactory
 from core.tests_base import BaseTestClass
 from promotion.factory import DiscountFactory

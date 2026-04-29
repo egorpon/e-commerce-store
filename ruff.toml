@@ -1,0 +1,10 @@
+
+line-length = 88
+target-version = "py312"
+exclude = ['settings.py', '.venv', 'venv', 'migrations']
+
+[lint]
+select = ["E", "F", "I", "UP"]
+
+[format]
+quote-style = "double"

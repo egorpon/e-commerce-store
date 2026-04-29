@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: ecommerce test+deploy
 
 on:
   push:
@@ -10,24 +10,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12.3' 
+          cache: 'pip'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name:  Run Linters (flake8)
+      - name:  Run Linters (ruff)
         run: |
-          flake8 .
+          ruff check
 
       - name: Run Tests
         run: |
+          cp env.ci .env
           python manage.py test
 
 
@@ -36,16 +38,20 @@ jobs:
     needs: test 
     steps:
       - name: Deploy via SSH
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_KEY }}
           script: |
+            set -e
             cd /home/ubuntu/e-commerce-store
-            git pull origin main
             source venv/bin/activate
+            git fetch origin
+            git checkout --detach ${{ github.sha }}
             pip install -r requirements.txt
-            python manage.py migrate
+            sudo supervisorctl stop all
+            python manage.py migrate --noinput
             python manage.py collectstatic --noinput
             sudo supervisorctl restart ecommerce
+            sudo systemctl reload nginx
