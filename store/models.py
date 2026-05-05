@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 from django.db import models
+from django.templatetags.static import static
 from django.urls import reverse
 
 # Create your models here.
@@ -29,7 +30,7 @@ class Product(models.Model):
     description = models.TextField(blank=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
     price = models.DecimalField(max_digits=4, decimal_places=2)
-    image = models.ImageField(upload_to="images/")
+    image = models.ImageField(upload_to="products/", blank=True)
 
     class Meta:
         verbose_name_plural = "products"
@@ -53,6 +54,12 @@ class Product(models.Model):
             percent = (1 - (self.sell_price / self.price)) * 100
             return round(percent)
         return 0
+
+    @property
+    def image_url(self):
+        if self.image and hasattr(self.image, "url"):
+            return self.image.url
+        return static("media/images/no_image.jpg")
 
     def get_absolute_url(self):
         return reverse("product_info", args=[self.slug])
