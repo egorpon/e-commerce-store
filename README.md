@@ -65,7 +65,3 @@ python manage.py test
 ## CI/CD
 
 GitHub Actions (`.github/workflows/main.yml`): lint (`ruff`) + test on every push to `main`, then deploy over SSH to an EC2 instance running under `supervisor` behind `nginx`.
-
-## Commit convention
-
-[Conventional Commits](https://www.conventionalcommits.org/): `feat(scope): ...`, `fix(scope): ...`, `test(scope): ...`
